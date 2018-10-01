@@ -1,4 +1,5 @@
-﻿using DFA.ContainsAtLeastOne_One;
+﻿using DFA.AcceptsNothing;
+using DFA.ContainsAtLeastOne_One;
 using DFA.EventLengthString;
 using DFA.ThirdToLastLetterIsOne;
 using System.Collections.Generic;
@@ -11,11 +12,43 @@ namespace DFA
         {
             var dfas = new List<DFA>();
 
+            dfas.Add(AcceptsNothing());
             dfas.Add(ContainsAtLeastOne_One());
             dfas.Add(IsEvenLengthString());
             dfas.Add(ThirdToLastLetterIsOne());
 
             return dfas;
+        }
+
+        public static DFA AcceptsNothing()
+        {
+            var states = new List<int>
+            {
+                1,
+                2
+            };
+
+            var alphabet = new List<char>
+            {
+                '0',
+                '1'
+            };
+
+            const int startingState = 1;
+            var acceptingStates = new List<int>
+            {
+                1,
+            };
+
+            var deltaFunction = AcceptsNothing_Deltas.ReturnAsDeltaFunction();
+
+            return new DFA(
+                states: states,
+                alphabet: alphabet,
+                startingState: startingState,
+                deltaFunction: deltaFunction,
+                acceptingStates: acceptingStates,
+                informalDefinition: "Accepts Nothing");
         }
 
         public static DFA ContainsAtLeastOne_One()

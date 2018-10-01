@@ -7,9 +7,7 @@ namespace DFA
     {
         public static void Main(string[] args)
         {
-
             var dfas = DFAFactory.CreateDFAs();
-
             var wordsToCheck = CreateWordsToCheck();
 
             foreach (var word in wordsToCheck)

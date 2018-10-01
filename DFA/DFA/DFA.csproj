@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptsNothing\AcceptsNothing_Deltas.cs" />
     <Compile Include="ContainsAtLeastOne_One\ContainsAtLeastOne_One_Deltas.cs" />
     <Compile Include="DFA.cs" />
     <Compile Include="DFAFactory.cs" />
