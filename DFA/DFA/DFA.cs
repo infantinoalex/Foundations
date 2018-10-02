@@ -29,7 +29,7 @@ namespace DFA
                 throw new ArgumentNullException(nameof(alphabet));
             }
 
-            if (deltaFunction == null)
+            if (deltaFunction == null || deltaFunction.Count == 0)
             {
                 throw new ArgumentNullException(nameof(deltaFunction));
             }
@@ -56,6 +56,11 @@ namespace DFA
 
         public bool Execute(string word)
         {
+            if (word == null)
+            {
+                throw new InvalidOperationException($"{nameof(word)} cannot be null. It CAN be empty");
+            }
+
             var currentState = this.startingState;
             foreach (var letter in word)
             {
