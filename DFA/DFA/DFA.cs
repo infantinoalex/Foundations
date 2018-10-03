@@ -5,12 +5,6 @@ namespace DFA
 {
     public class DFA
     {
-        private List<int> states;
-        private List<char> alphabet;
-        private int startingState;
-        private List<int> acceptingStates;
-        private Dictionary<int, Func<char, int>> deltaFunction;
-
         public DFA(
             List<int> states,
             List<char> alphabet,
@@ -44,13 +38,23 @@ namespace DFA
                 throw new ArgumentNullException(nameof(informalDefinition));
             }
 
-            this.states = states;
-            this.alphabet = alphabet;
-            this.startingState = startingState;
-            this.deltaFunction = deltaFunction;
-            this.acceptingStates = acceptingStates;
+            this.States = states;
+            this.Alphabet = alphabet;
+            this.StartingState = startingState;
+            this.DeltaFunction = deltaFunction;
+            this.AcceptingStates = acceptingStates;
             this.InformalDefinition = informalDefinition;
         }
+
+        public List<int> States { get; }
+
+        public List<char> Alphabet { get; }
+
+        public int StartingState { get; }
+
+        public List<int> AcceptingStates { get; }
+
+        public Dictionary<int, Func<char, int>> DeltaFunction { get; }
 
         public string InformalDefinition { get; }
 
@@ -61,24 +65,24 @@ namespace DFA
                 throw new InvalidOperationException($"{nameof(word)} cannot be null. It CAN be empty");
             }
 
-            var currentState = this.startingState;
+            var currentState = this.StartingState;
             foreach (var letter in word)
             {
-                if (!this.states.Contains(currentState))
+                if (!this.States.Contains(currentState))
                 {
-                    throw new InvalidOperationException($"The current state of: [{currentState}] was not found in the list of possible states: {this.states}");
+                    throw new InvalidOperationException($"The current state of: [{currentState}] was not found in the list of possible states: {this.States}");
                 }
 
-                if (!this.alphabet.Contains(letter))
+                if (!this.Alphabet.Contains(letter))
                 {
                     return false;
                 }
 
-                var delta = this.deltaFunction[currentState];
+                var delta = this.DeltaFunction[currentState];
                 currentState = delta.Invoke(letter);
             }
 
-            return this.acceptingStates.Contains(currentState);
+            return this.AcceptingStates.Contains(currentState);
         }
     }
 }

@@ -12,9 +12,9 @@ namespace DFA
         {
             var dfas = new List<DFA>();
 
-            //dfas.Add(AcceptsNothing());
-            //dfas.Add(ContainsAtLeastOne_One());
-            //dfas.Add(IsEvenLengthString());
+            dfas.Add(AcceptsNothing());
+            dfas.Add(ContainsAtLeastOne_One());
+            dfas.Add(IsEvenLengthString());
             dfas.Add(ThirdToLastLetterIsOne());
 
             return dfas;

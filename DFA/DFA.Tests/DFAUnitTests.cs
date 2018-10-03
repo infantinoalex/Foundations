@@ -45,6 +45,11 @@ namespace DFA.Tests
 
             // Assert
             Assert.IsInstanceOfType(dfa, typeof(DFA));
+            Assert.AreEqual(states, dfa.States);
+            Assert.AreEqual(startingState, dfa.StartingState);
+            Assert.AreEqual(deltaFunction, dfa.DeltaFunction);
+            Assert.AreEqual(acceptingStates, dfa.AcceptingStates);
+            Assert.AreEqual(alphabet, dfa.Alphabet);     
             Assert.AreEqual(informalDefinition, dfa.InformalDefinition);
         }
 
