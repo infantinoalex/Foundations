@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DFACompiler;
 
 namespace NfaToDfaCompiler
 {
@@ -11,7 +12,6 @@ namespace NfaToDfaCompiler
             List<char> alphabet,
             int startingState,
             Dictionary<int, Func<char, List<int>>> deltaFunction,
-            Dictionary<int, Func<List<int>>> epsilonTransitions,
             List<int> acceptingStates,
             string informalDefinition)
         {
@@ -46,7 +46,6 @@ namespace NfaToDfaCompiler
             this.DeltaFunction = deltaFunction;
             this.AcceptingStates = acceptingStates;
             this.InformalDefinition = informalDefinition;
-            this.EpsilonTransitions = epsilonTransitions;
         }
 
         public List<int> States { get; }
@@ -59,8 +58,6 @@ namespace NfaToDfaCompiler
 
         public Dictionary<int, Func<char, List<int>>> DeltaFunction { get; }
 
-        public Dictionary<int, Func<List<int>>> EpsilonTransitions { get; }
-
         public string InformalDefinition { get; }
 
         public bool Execute(string word)
@@ -72,7 +69,6 @@ namespace NfaToDfaCompiler
 
             var currentStates = new List<int>();
             currentStates.Add(this.StartingState);
-            currentStates.AddRange(this.processEpsilonTransitions(currentStates));
 
             foreach (var letter in word)
             {
@@ -86,8 +82,7 @@ namespace NfaToDfaCompiler
                     return false;
                 }
 
-                currentStates.AddRange(this.processEpsilonTransitions(currentStates));
-                currentStates = currentStates.Distinct().ToList();
+                currentStates = currentStates.ToList();
 
                 var foundStates = new List<int>();
                 foreach (var currentState in currentStates)
@@ -102,26 +97,17 @@ namespace NfaToDfaCompiler
             return currentStates.Any(state => this.AcceptingStates.Contains(state));
         }
 
-        private List<int> processEpsilonTransitions(List<int> currentStates)
+        public DFA ConvertToDFA()
         {
-            // Need to loop through until there are no more epsilon transitions
-            // Can we do recursion?
-            var resultingStates = new List<int>();
-            foreach (var currentState in currentStates)
-            {
-                if (this.EpsilonTransitions.ContainsKey(currentState))
-                {
-                    var epsilonFunction = this.EpsilonTransitions[currentState];
-                    resultingStates.AddRange(epsilonFunction.Invoke());
-                }
-            }
+            var nfaStates = new List<int>();
 
-            if (resultingStates.Any(state => this.EpsilonTransitions.ContainsKey(state)))
-            {
-                resultingStates.AddRange(this.processEpsilonTransitions(resultingStates));
-            }
-
-            return resultingStates;
+            return new DFA(
+                states: null,
+                alphabet: this.Alphabet,
+                startingState: -1,
+                deltaFunction: null,
+                acceptingStates: null,
+                informalDefinition: this.InformalDefinition);
         }
     }
 }

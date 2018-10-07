@@ -56,9 +56,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DFA\DFA.csproj">
+    <ProjectReference Include="..\DFA\DFACompiler.csproj">
       <Project>{e031f727-6822-410e-9b05-0ddb4321f10e}</Project>
-      <Name>DFA</Name>
+      <Name>DFACompiler</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DFA.ThirdToLastLetterIsOne
+namespace DFACompiler.ThirdToLastLetterIsOne
 {
     public static class ThirdToLastLetterIsOne_Deltas
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DFA
+namespace DFACompiler
 {
     public class Program
     {

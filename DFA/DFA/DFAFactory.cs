@@ -1,10 +1,10 @@
-﻿using DFA.AcceptsNothing;
-using DFA.ContainsAtLeastOne_One;
-using DFA.EventLengthString;
-using DFA.ThirdToLastLetterIsOne;
+﻿using DFACompiler.AcceptsNothing;
+using DFACompiler.ContainsAtLeastOne_One;
+using DFACompiler.EvenLengthString;
+using DFACompiler.ThirdToLastLetterIsOne;
 using System.Collections.Generic;
 
-namespace DFA
+namespace DFACompiler
 {
     public static class DFAFactory
     {
@@ -48,7 +48,7 @@ namespace DFA
                 startingState: startingState,
                 deltaFunction: deltaFunction,
                 acceptingStates: acceptingStates,
-                informalDefinition: "Accepts Nothing");
+                informalDefinition: "Accepts epsilon");
         }
 
         public static DFA ContainsAtLeastOne_One()

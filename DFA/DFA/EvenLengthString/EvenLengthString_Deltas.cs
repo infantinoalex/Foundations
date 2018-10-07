@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DFA.EventLengthString
+namespace DFACompiler.EvenLengthString
 {
     public static class EvenLengthString_Deltas
     {

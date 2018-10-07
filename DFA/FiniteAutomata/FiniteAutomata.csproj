@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E031F727-6822-410E-9B05-0DDB4321F10E}</ProjectGuid>
+    <ProjectGuid>{5A29103E-E420-487E-8B22-E0E67738C1A2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DFA</RootNamespace>
-    <AssemblyName>DFA</AssemblyName>
+    <RootNamespace>FiniteAutomata</RootNamespace>
+    <AssemblyName>FiniteAutomata</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,14 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AcceptsNothing\AcceptsNothing_Deltas.cs" />
-    <Compile Include="ContainsAtLeastOne_One\ContainsAtLeastOne_One_Deltas.cs" />
     <Compile Include="DFA.cs" />
-    <Compile Include="DFAFactory.cs" />
-    <Compile Include="EventLengthString\EvenLengthString_Deltas.cs" />
+    <Compile Include="DFAFactory\DFAFactory.cs" />
+    <Compile Include="NFA.cs" />
+    <Compile Include="NFAFactory\NFAFactory.cs" />
+    <Compile Include="NFAFactory\NFAToDFAFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThirdToLastLetterIsOne\ThirdToLastLetterIsOne_Deltas.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

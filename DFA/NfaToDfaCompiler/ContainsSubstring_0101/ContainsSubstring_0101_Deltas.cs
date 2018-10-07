@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NfaToDfaCompiler.IsEvenLengthOrOddNumber
+namespace NfaToDfaCompiler.ContainsSubstring_0101
 {
-    public static class IsEvenLengthOrOddNumber_Deltas
+    public static class ContainsSubstring_0101_Deltas
     {
         public static Dictionary<int, Func<char, List<int>>> ReturnAsDeltaFunction()
         {
@@ -20,70 +20,82 @@ namespace NfaToDfaCompiler.IsEvenLengthOrOddNumber
         public static List<int> StateOne(char input)
         {
             var states = new List<int>();
-            states.AddRange(StateTwo(input));
-            states.AddRange(StateFour(input));
+
+            if (input == '1')
+            {
+                states.Add(1);
+            }
+            else if (input == '0')
+            {
+                states.Add(2);
+                states.Add(1);
+            }
 
             return states;
         }
 
         public static List<int> StateTwo(char input)
         {
-            var newStates = new List<int>();
-            if (input == '0')
+            var states = new List<int>();
+
+            if (input == '1')
             {
-                newStates.Add(3);
+                states.Add(3);
             }
-            else
+            else if (input == '0')
             {
-                newStates.Add(3);
+                states.Add(1);
             }
 
-            return newStates;
+            return states;
         }
 
         public static List<int> StateThree(char input)
         {
-            var newStates = new List<int>();
-            if (input == '0')
+            var states = new List<int>();
+
+            if (input == '1')
             {
-                newStates.Add(2);
+                states.Add(1);
             }
-            else
+            else if (input == '0')
             {
-                newStates.Add(2);
+                states.Add(4);
             }
 
-            return newStates;
+            return states;
         }
 
         public static List<int> StateFour(char input)
         {
-            var newStates = new List<int>();
-            if (input == '0')
+            var states = new List<int>();
+
+            if (input == '1')
             {
-                newStates.Add(4);
+                states.Add(5);
             }
-            else
+            else if (input == '0')
             {
-                newStates.Add(5);
+                states.Add(1);
             }
 
-            return newStates;
+            return states;
         }
 
         public static List<int> StateFive(char input)
         {
-            var newStates = new List<int>();
-            if (input == '0')
+            var states = new List<int>();
+
+            if (input == '1')
             {
-                newStates.Add(4);
+                states.Add(5);
             }
-            else
+            else if (input == '0')
             {
-                newStates.Add(5);
+                states.Add(5);
             }
 
-            return newStates;
+            return states;
         }
     }
 }

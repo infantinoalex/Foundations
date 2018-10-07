@@ -1,7 +1,8 @@
-﻿using DFA.EventLengthString;
+﻿using DFACompiler.EvenLengthString;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using DFACompiler;
 
 namespace DFA.Tests
 {
@@ -35,7 +36,7 @@ namespace DFA.Tests
             const string informalDefinition = "Test";
 
             // Act
-            var dfa = new DFA(
+            var dfa = new DFACompiler.DFA(
                 states: states,
                 alphabet: alphabet,
                 startingState: startingState,
@@ -44,7 +45,7 @@ namespace DFA.Tests
                 informalDefinition: informalDefinition);
 
             // Assert
-            Assert.IsInstanceOfType(dfa, typeof(DFA));
+            Assert.IsInstanceOfType(dfa, typeof(DFACompiler.DFA));
             Assert.AreEqual(states, dfa.States);
             Assert.AreEqual(startingState, dfa.StartingState);
             Assert.AreEqual(deltaFunction, dfa.DeltaFunction);
@@ -76,7 +77,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: null,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -108,7 +109,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: null,
                         startingState: startingState,
@@ -140,7 +141,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: null,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -173,7 +174,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -208,7 +209,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -245,7 +246,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -282,7 +283,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -320,7 +321,7 @@ namespace DFA.Tests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
                 () =>
-                    new DFA(
+                    new DFACompiler.DFA(
                         states: states,
                         alphabet: alphabet,
                         startingState: startingState,
@@ -355,7 +356,7 @@ namespace DFA.Tests
             var acceptingStates = new List<int>();
             const string informalDefinition = "Test";
 
-            var dfa = new DFA(
+            var dfa = new DFACompiler.DFA(
                 states: states,
                 alphabet: alphabet,
                 startingState: startingState,
@@ -395,7 +396,7 @@ namespace DFA.Tests
             var acceptingStates = new List<int>();
             const string informalDefinition = "Test";
 
-            var dfa = new DFA(
+            var dfa = new DFACompiler.DFA(
                 states: states,
                 alphabet: alphabet,
                 startingState: startingState,
@@ -456,7 +457,7 @@ namespace DFA.Tests
             Assert.IsFalse(result);
         }
 
-        private static DFA IsEvenLengthString()
+        private static DFACompiler.DFA IsEvenLengthString()
         {
             var states = new List<int>
             {
@@ -478,7 +479,7 @@ namespace DFA.Tests
 
             var deltaFunction = EvenLengthString_Deltas.ReturnAsDeltaFunction();
 
-            return new DFA(
+            return new DFACompiler.DFA(
                 states: states,
                 alphabet: alphabet,
                 startingState: startingState,

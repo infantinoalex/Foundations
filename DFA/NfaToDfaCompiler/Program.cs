@@ -18,7 +18,7 @@ namespace NfaToDfaCompiler
 
                     var result = nfa.Execute(word);
 
-                    var acceptedRejected = result ? "accepted" : "rejected";
+                     var acceptedRejected = result ? "accepted" : "rejected";
                     Console.WriteLine($"Result is word:\t[{word}] has been [{acceptedRejected}]\n\n");
                 }
             }
@@ -31,12 +31,12 @@ namespace NfaToDfaCompiler
         {
             var words = new List<string>();
 
-            words.Add("101010101010");
-            words.Add(string.Empty);
-            words.Add("00000110");
-            words.Add("00000000");
-            words.Add("0000010");
+            //words.Add("101010101010");
+            //words.Add(string.Empty);
+            //words.Add("00000110");
+            words.Add("000000000");
             words.Add("00000100");
+            words.Add("000001001");
 
             return words;
         }

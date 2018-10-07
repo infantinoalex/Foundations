@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DFA.ContainsAtLeastOne_One
+namespace DFACompiler.ContainsAtLeastOne_One
 {
     public static class ContainsAtLeastOne_One_Deltas
     {
