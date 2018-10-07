@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFACompiler", "DFA\DFACompiler.csproj", "{E031F727-6822-410E-9B05-0DDB4321F10E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFACompiler", "Old\DFA\DFACompiler.csproj", "{E031F727-6822-410E-9B05-0DDB4321F10E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFA.Tests", "DFA.Tests\DFA.Tests.csproj", "{413D683B-DDDD-46F5-B5ED-8FDA26D08206}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFA.Tests", "Old\DFA.Tests\DFA.Tests.csproj", "{413D683B-DDDD-46F5-B5ED-8FDA26D08206}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfaToDfaCompiler", "NfaToDfaCompiler\NfaToDfaCompiler.csproj", "{1EC4B969-955A-4362-AB82-20294A22A54A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfaToDfaCompiler", "Old\NfaToDfaCompiler\NfaToDfaCompiler.csproj", "{1EC4B969-955A-4362-AB82-20294A22A54A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old", "Old", "{0CD1E913-A3CA-474E-BCC9-B0D82598DA7F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Current", "Current", "{D0DBCC09-A213-496B-8C1A-A32F0C3387E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteAutomata", "FiniteAutomata\FiniteAutomata.csproj", "{5A29103E-E420-487E-8B22-E0E67738C1A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteAutomata", "Current\FiniteAutomata\FiniteAutomata.csproj", "{5A29103E-E420-487E-8B22-E0E67738C1A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
