@@ -30,28 +30,27 @@ namespace FiniteAutomata
             //Console.WriteLine("All words have been checked using DFAs.\nPress [Enter] to check with NFAs.");
             //Console.ReadLine();
 
-            //Console.WriteLine("Checking words with NFAs");
+            Console.WriteLine("Checking words with NFAs");
 
-            //var nfas = NFAFactory.NFAFactory.CreateNFAs();
-            //foreach (var word in wordsToCheck)
-            //{
-            //    foreach (var nfa in nfas)
-            //    {
-            //        Console.WriteLine(nfa.DeltaFunctionTableAsString());
-            //        Console.WriteLine($"Checking word:\t[{word}] with NFA: [{nfa.InformalDefinition}]");
+            var nfas = NFAFactory.NFAFactory.CreateNFAs();
+            foreach (var word in wordsToCheck)
+            {
+                foreach (var nfa in nfas)
+                {
+                    Console.WriteLine(nfa.DeltaFunctionTableAsString());
+                    Console.WriteLine($"Checking word:\t[{word}] with NFA: [{nfa.InformalDefinition}]");
 
-            //        var result = nfa.Execute(word);
+                    var result = nfa.Execute(word);
 
-            //        var acceptedRejected = result ? "accepted" : "rejected";
-            //        Console.WriteLine($"Result is word:\t[{word}] has been [{acceptedRejected}]\n\n");
-            //    }
-            //}
+                    var acceptedRejected = result ? "accepted" : "rejected";
+                    Console.WriteLine($"Result is word:\t[{word}] has been [{acceptedRejected}]\n\n");
+                }
+            }
 
-            //Console.WriteLine("All words have been checked using NFAs.\nPress [Enter] exit.");
-            //Console.ReadLine();
+            Console.WriteLine("All words have been checked using NFAs.\nPress [Enter] to check the converter.");
+            Console.ReadLine();
 
             Console.WriteLine("Converting NFAs to DFAs");
-            var nfaToDfaWords = NFAToDFAWords();
             var nfaToConvert = NFAToDFAFactory.CreateNFAs();
             foreach (var nfa in nfaToConvert)
             {            
@@ -59,7 +58,7 @@ namespace FiniteAutomata
                 Console.WriteLine($"NFA:\n{nfa.DeltaFunctionTableAsString()}\n");
                 Console.WriteLine($"Converted DFA:\n{convertedDFA.DeltaFunctionTableAsString()}\n");
 
-                foreach (var word in nfaToDfaWords)
+                foreach (var word in wordsToCheck)
                 {
                     var nfaResult = nfa.Execute(word);
                     var nfaAcceptedRejected = nfaResult ? "accepted" : "rejected";
@@ -91,19 +90,9 @@ namespace FiniteAutomata
                 "00000110",
                 "00000000",
                 "0000010",
-                "0001100"
-            };
-        }
-
-        public static List<string> NFAToDFAWords()
-        {
-            return new List<string>
-            {
-                "aaaaaaaaab",
-                "aaaaaaaaaa",
-                "bbbbbbbbbb",
-                "ab",
-                "abbbbbbb",
+                "0001100",
+                "111111110",
+                "01111111",
             };
         }
     }

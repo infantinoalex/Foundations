@@ -10,8 +10,9 @@ namespace FiniteAutomata.NFAFactory
             var nfas = new List<NFA>
             {
                 //IsEvenLengthOrOddNumber(),
-                ContainsSubstring0101(),
-                //ContainsEven0orExactlyTwo1()
+                //ContainsSubstring0101(),
+                //ContainsEven0orExactlyTwo1(),
+                ContainsAtLeastTwo0s(),
             };
 
             return nfas;
@@ -161,6 +162,48 @@ namespace FiniteAutomata.NFAFactory
                 deltaFunction: deltaFunction,
                 acceptingStates: acceptingStates,
                 informalDefinition: "Contains even # of 0s or exactly two 1's");
+        }
+
+        public static NFA ContainsAtLeastTwo0s()
+        {
+            var states = new List<string>
+            {
+                "q0",
+                "q1",
+                "q2",
+            };
+
+            var alphabet = new List<char>
+            {
+                '0',
+                '1'
+            };
+
+            const string startingState = "q0";
+            var acceptingStates = new List<string>
+            {
+                "q2",
+            };
+
+            var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>
+            {
+                { new Tuple<string, char>("q0", '0'), new List<string> { "q1", "q2" } },
+                { new Tuple<string, char>("q0", '1'), new List<string> { "q0" } },
+                { new Tuple<string, char>("q0", 'E'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q1", '0'), new List<string> { } },
+                { new Tuple<string, char>("q1", '1'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q1", 'E'), new List<string> { "q2" } },
+                { new Tuple<string, char>("q2", '0'), new List<string> { "q2" } },
+                { new Tuple<string, char>("q2", '1'), new List<string> { "q2" } },
+            };
+
+            return new NFA(
+                states: states,
+                alphabet: alphabet,
+                startingState: startingState,
+                deltaFunction: deltaFunction,
+                acceptingStates: acceptingStates,
+                informalDefinition: "Contains Anything");
         }
     }
 }

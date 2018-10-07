@@ -30,8 +30,8 @@ namespace FiniteAutomata.NFAFactory
 
             var alphabet = new List<char>
             {
-                'a',
-                'b'
+                '0',
+                '1'
             };
 
             const string startingState = "q0";
@@ -42,9 +42,9 @@ namespace FiniteAutomata.NFAFactory
 
             var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>
             {
-                { new Tuple<string, char>("q0", 'a'), new List<string> { "q0", "q1" } },
-                { new Tuple<string, char>("q0", 'b'), new List<string> { "q0" } },
-                { new Tuple<string, char>("q1", 'b'), new List<string> { "q2" } },
+                { new Tuple<string, char>("q0", '0'), new List<string> { "q0", "q1" } },
+                { new Tuple<string, char>("q0", '1'), new List<string> { "q0" } },
+                { new Tuple<string, char>("q1", '1'), new List<string> { "q2" } },
             };
 
             return new NFA(
@@ -53,7 +53,7 @@ namespace FiniteAutomata.NFAFactory
                 startingState: startingState,
                 deltaFunction: deltaFunction,
                 acceptingStates: acceptingStates,
-                informalDefinition: "Ends with ab");
+                informalDefinition: "Ends with 01");
         }
 
         public static NFA TestNFAWithEpsilon()
@@ -95,7 +95,7 @@ namespace FiniteAutomata.NFAFactory
                 startingState: startingState,
                 deltaFunction: deltaFunction,
                 acceptingStates: acceptingStates,
-                informalDefinition: "Ends with ab");
+                informalDefinition: "Contains Anything");
         }
     }
 }
