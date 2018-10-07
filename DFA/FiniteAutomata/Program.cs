@@ -54,22 +54,27 @@ namespace FiniteAutomata
             var nfaToDfaWords = NFAToDFAWords();
             var nfaToConvert = NFAToDFAFactory.CreateNFAs();
             foreach (var nfa in nfaToConvert)
-            {
+            {            
+                var convertedDFA = nfa.ConvertToDFA();
+                Console.WriteLine($"NFA:\n{nfa.DeltaFunctionTableAsString()}\n");
+                Console.WriteLine($"Converted DFA:\n{convertedDFA.DeltaFunctionTableAsString()}\n");
+
                 foreach (var word in nfaToDfaWords)
                 {
-                    Console.WriteLine($"Checking word:\t[{word}] with NFA: [{nfa.InformalDefinition}]");
-                    var result = nfa.Execute(word);
-                    var acceptedRejected = result ? "accepted" : "rejected";
-                    Console.WriteLine($"Before Conversion Result of NFA on word: [{word}] is [{result}]");
+                    var nfaResult = nfa.Execute(word);
+                    var nfaAcceptedRejected = nfaResult ? "accepted" : "rejected";
 
-                    //Console.WriteLine($"NFA:\n{nfa.DeltaFunctionTableAsString()}\n");
-                    var dfa = nfa.ConvertToDFA();
-                    //Console.WriteLine($"Converted DFA:\n{dfa.DeltaFunctionTableAsString()}\n");
+                    var dfaResult = convertedDFA.Execute(word);
+                    var dfaAcceptedRejected = dfaResult ? "accepted" : "rejected";
 
-                    Console.WriteLine($"Checking word:\t[{word}] with DFA: [{dfa.InformalDefinition}]");
-                    result = dfa.Execute(word);
-                    acceptedRejected = result ? "accepted" : "rejected";
-                    Console.WriteLine($"After Conversion Result of DFA on word: [{word}] is [{result}]\n\n");
+                    if (nfaResult != dfaResult)
+                    {
+                        Console.WriteLine($"Error converting NFA to DFA.\nTested word: [{word}] and got result [{nfaAcceptedRejected}] from NFA and got result [{dfaAcceptedRejected}] from DFA.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Testing [{word}] received the same result of [{nfaAcceptedRejected}] from both NFA and DFA.");
+                    }
                 }
             }
 
@@ -94,10 +99,10 @@ namespace FiniteAutomata
         {
             return new List<string>
             {
-                //"aaaaaaaaab",
-                //"aaaaaaaaaa",
-                //"bbbbbbbbbb",
-                //"ab",
+                "aaaaaaaaab",
+                "aaaaaaaaaa",
+                "bbbbbbbbbb",
+                "ab",
                 "abbbbbbb",
             };
         }
