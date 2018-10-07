@@ -12,8 +12,8 @@ namespace FiniteAutomata.NFAFactory
         {
             var nfas = new List<NFA>
             {
-                //TestNFA(),
-                TestNFAWithEpsilon(),
+                TestNFA(),
+                //TestNFAWithEpsilon(),
             };
 
             return nfas;

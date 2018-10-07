@@ -187,17 +187,13 @@ namespace FiniteAutomata
                     var pair = new Tuple<string, char>(currentState, letter);
 
                     // This function will take a state and a letter and append all possible paths it could take
-                    var epsilonStates = this.CalculateEpsilonConversion(currentState, letter);
-                    var resultingStates = this.CalculateNewInput(currentState, letter);
-
-                    if (!resultingStates.Contains(epsilonStates))
-                    {
-                        resultingStates += epsilonStates;
-                    }
+                    var currentStateAsList = currentState.Split(' ').ToList();
+                    var resultingStates = this.CalculateNewInput(currentStateAsList, letter);
 
                     if (!dfaDeltaFunction.ContainsKey(pair))
                     {
-                        dfaDeltaFunction.Add(pair, resultingStates);
+                        var resultingStatesAsString = string.Join(" ", resultingStates.ToArray());
+                        dfaDeltaFunction.Add(pair, resultingStatesAsString);
                     }
                 }
 
@@ -222,11 +218,10 @@ namespace FiniteAutomata
                 informalDefinition: this.InformalDefinition);
         }
 
-        private string CalculateNewInput(string states, char character)
+        private List<string> CalculateNewInput(List<string> states, char character)
         {
-            var separatedInput = states.Split(' ');
-            var result = string.Empty;
-            foreach (var input in separatedInput)
+            var result = new List<string>();
+            foreach (var input in states)
             {
                 var pair = new Tuple<string, char>(input, character);
                 if (!this.DeltaFunction.ContainsKey(pair) || this.DeltaFunction[pair] == null)
@@ -234,35 +229,12 @@ namespace FiniteAutomata
                     continue;
                 }
 
-                result += $"{string.Join(" ", this.DeltaFunction[pair])} ";
+                result.AddRange(this.DeltaFunction[pair]);
             }
 
-            return result.TrimEnd(' ');
-        }
-
-        private string CalculateEpsilonConversion(string states, char character)
-        {
-            var separatedInput = states.Split(' ');
-            var result = string.Empty;
-            foreach (var input in separatedInput)
-            {
-                var pair = new Tuple<string, char>(input, 'E');
-                if (!this.DeltaFunction.ContainsKey(pair) || this.DeltaFunction[pair] == null)
-                {
-                    continue;
-                }
-                else
-                {
-                    var newStates = this.DeltaFunction[pair];
-                    foreach (var state in newStates)
-                    {
-                        result += $"{this.CalculateEpsilonConversion(state, character)} ";
-                        result += $"{this.CalculateNewInput(state, character)} ";
-                    }
-                }
-            }
-
-            return result.TrimEnd(' '); ;
+            result = result.Distinct().ToList();
+            result.Sort();
+            return result;
         }
 
         private List<string> ProcessEpsilonTransitions(List<string> currentStates)
