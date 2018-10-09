@@ -68,6 +68,7 @@ namespace FiniteAutomata
 
             var currentStates = new List<string>();
             currentStates.Add(this.StartingState);
+            currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates));
 
             foreach (var letter in word)
             {
@@ -80,8 +81,6 @@ namespace FiniteAutomata
                 {
                     return false;
                 }
-
-                currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates));
 
                 var foundStates = new List<string>();
                 foreach (var currentState in currentStates)
@@ -97,6 +96,7 @@ namespace FiniteAutomata
                 }
 
                 currentStates = foundStates;
+                currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates));
             }
 
             return currentStates.Any(state => this.AcceptingStates.Contains(state));
