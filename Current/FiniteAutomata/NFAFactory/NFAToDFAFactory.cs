@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiniteAutomata.NFAFactory
 {
@@ -13,7 +10,7 @@ namespace FiniteAutomata.NFAFactory
             var nfas = new List<NFA>
             {
                 TestNFA(),
-                //TestNFAWithEpsilon(),
+                TestNFAWithEpsilon(),
             };
 
             return nfas;
@@ -81,10 +78,10 @@ namespace FiniteAutomata.NFAFactory
             {
                 { new Tuple<string, char>("q0", '0'), new List<string> { "q1", "q2" } },
                 { new Tuple<string, char>("q0", '1'), new List<string> { "q0" } },
-                { new Tuple<string, char>("q0", 'E'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q0", '\0'), new List<string> { "q1" } },
                 { new Tuple<string, char>("q1", '0'), new List<string> { } },
                 { new Tuple<string, char>("q1", '1'), new List<string> { "q1" } },
-                { new Tuple<string, char>("q1", 'E'), new List<string> { "q2" } },
+                { new Tuple<string, char>("q1", '\0'), new List<string> { "q2" } },
                 { new Tuple<string, char>("q2", '0'), new List<string> { "q2" } },
                 { new Tuple<string, char>("q2", '1'), new List<string> { "q2" } },
             };

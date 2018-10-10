@@ -68,7 +68,7 @@ namespace FiniteAutomata
 
             var currentStates = new List<string>();
             currentStates.Add(this.StartingState);
-            currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates));
+            currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates, new List<string>()));
 
             foreach (var letter in word)
             {
@@ -96,7 +96,7 @@ namespace FiniteAutomata
                 }
 
                 currentStates = foundStates;
-                currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates));
+                currentStates.AddRange(this.ProcessEpsilonTransitions(currentStates, new List<string>()));
             }
 
             return currentStates.Any(state => this.AcceptingStates.Contains(state));
@@ -176,18 +176,32 @@ namespace FiniteAutomata
 
             // While there is a state in our dfaDeltaFunction that we havent expanded in qPrime, expand it
             var currentState = this.StartingState;
+            var dfaStartingState = string.Empty;
             while (currentState != null)
             {
+                var currentStateAsList = currentState.Split(' ').ToList();
+
+                var epsilonStates = this.CalculateEpsilonTransitions(currentStateAsList);
+                currentStateAsList.AddRange(epsilonStates);
+                currentStateAsList = currentStateAsList.Distinct().ToList();
+                currentStateAsList.Sort();
+
+                currentState = string.Join(" ", currentStateAsList.ToArray());
+
                 // Add to qPrime now since we are currently expanding
                 qPrime.Add(currentState);
                 
+                if (string.IsNullOrWhiteSpace(dfaStartingState))
+                {
+                    dfaStartingState = currentState;
+                }
+
                 // Find all the transitions for a single letter that the current state can go to
                 foreach (var letter in this.Alphabet)
                 {
                     var pair = new Tuple<string, char>(currentState, letter);
 
                     // This function will take a state and a letter and append all possible paths it could take
-                    var currentStateAsList = currentState.Split(' ').ToList();
                     var resultingStates = this.CalculateNewInput(currentStateAsList, letter);
 
                     if (!dfaDeltaFunction.ContainsKey(pair))
@@ -212,10 +226,18 @@ namespace FiniteAutomata
             return new DFA(
                 states: qPrime,
                 alphabet: this.Alphabet,
-                startingState: this.StartingState,
+                startingState: dfaStartingState,
                 deltaFunction: dfaDeltaFunction,
                 acceptingStates: acceptingStates,
                 informalDefinition: this.InformalDefinition);
+        }
+
+        private List<string> CalculateEpsilonTransitions(List<string> states)
+        {
+            var epsilonTransitionResult = this.ProcessEpsilonTransitions(states, new List<string>());
+            epsilonTransitionResult = epsilonTransitionResult.Distinct().ToList();
+            epsilonTransitionResult.Sort();
+            return epsilonTransitionResult;
         }
 
         private List<string> CalculateNewInput(List<string> states, char character)
@@ -237,22 +259,23 @@ namespace FiniteAutomata
             return result;
         }
 
-        private List<string> ProcessEpsilonTransitions(List<string> currentStates)
+        private List<string> ProcessEpsilonTransitions(List<string> currentStates, List<string> previousStates)
         {
             var epsilonStates = new List<string>();
             foreach (var state in currentStates)
             {
-                var epsilonPair = new Tuple<string, char>(state, 'E');
+                var epsilonPair = new Tuple<string, char>(state, '\0');
                 if (this.DeltaFunction.ContainsKey(epsilonPair))
                 {
                     epsilonStates.AddRange(this.DeltaFunction[epsilonPair]);
                 }
             }
 
-            var unexploredStates = epsilonStates.Where(state => !currentStates.Contains(state)).ToList();
+            var unexploredStates = epsilonStates.Where(state => !previousStates.Contains(state)).ToList();
             if (unexploredStates.Count != 0)
             {
-                epsilonStates.AddRange(this.ProcessEpsilonTransitions(unexploredStates));
+                previousStates.AddRange(currentStates);
+                epsilonStates.AddRange(this.ProcessEpsilonTransitions(unexploredStates, previousStates));
             }
 
             return epsilonStates;

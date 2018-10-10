@@ -1,0 +1,2 @@
+https://www.geeksforgeeks.org/program-implement-nfa-epsilon-move-dfa-conversion/
+https://www.geeksforgeeks.org/theory-of-computation-conversion-from-nfa-to-dfa/

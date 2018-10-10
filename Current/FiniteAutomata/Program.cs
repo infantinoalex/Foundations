@@ -30,25 +30,25 @@ namespace FiniteAutomata
             //Console.WriteLine("All words have been checked using DFAs.\nPress [Enter] to check with NFAs.");
             //Console.ReadLine();
 
-            Console.WriteLine("Checking words with NFAs");
+            //Console.WriteLine("Checking words with NFAs");
 
-            var nfas = NFAFactory.NFAFactory.CreateNFAs();
-            foreach (var word in wordsToCheck)
-            {
-                foreach (var nfa in nfas)
-                {
-                    Console.WriteLine(nfa.DeltaFunctionTableAsString());
-                    Console.WriteLine($"Checking word:\t[{word}] with NFA: [{nfa.InformalDefinition}]");
+            //var nfas = NFAFactory.NFAFactory.CreateNFAs();
+            //foreach (var word in wordsToCheck)
+            //{
+            //    foreach (var nfa in nfas)
+            //    {
+            //        Console.WriteLine(nfa.DeltaFunctionTableAsString());
+            //        Console.WriteLine($"Checking word:\t[{word}] with NFA: [{nfa.InformalDefinition}]");
 
-                    var result = nfa.Execute(word);
+            //        var result = nfa.Execute(word);
 
-                    var acceptedRejected = result ? "accepted" : "rejected";
-                    Console.WriteLine($"Result is word:\t[{word}] has been [{acceptedRejected}]\n\n");
-                }
-            }
+            //        var acceptedRejected = result ? "accepted" : "rejected";
+            //        Console.WriteLine($"Result is word:\t[{word}] has been [{acceptedRejected}]\n\n");
+            //    }
+            //}
 
-            Console.WriteLine("All words have been checked using NFAs.\nPress [Enter] to check the converter.");
-            Console.ReadLine();
+            //Console.WriteLine("All words have been checked using NFAs.\nPress [Enter] to check the converter.");
+            //Console.ReadLine();
 
             Console.WriteLine("Converting NFAs to DFAs");
             var nfaToConvert = NFAToDFAFactory.CreateNFAs();
@@ -86,6 +86,7 @@ namespace FiniteAutomata
             return new List<string>
             {
                 "101010101010",
+                "1",
                 string.Empty,
                 "00000110",
                 "00000000",
