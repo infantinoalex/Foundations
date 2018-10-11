@@ -112,7 +112,7 @@ namespace FiniteAutomata
             var regex = new List<List<object>>();
             regex.Add(new List<object>
             {
-                OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION,OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS
+                OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS
             });
 
             //regex.Add(new List<object>

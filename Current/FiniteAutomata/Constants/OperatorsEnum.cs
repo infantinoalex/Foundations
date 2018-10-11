@@ -12,6 +12,8 @@ namespace FiniteAutomata.Constants
         OPENPARENS,
         CLOSEPARENS,
         UNION,
-        CONCAT
+        CONCAT,
+        EMPTY,
+        SYMBOL
     }
 }
