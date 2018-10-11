@@ -36,7 +36,7 @@ namespace FiniteAutomata
                 { new Tuple<string, List<object>>("START", regex), new List<string> { "END" } }
             };
 
-            deltaFunctionToProcess = GroupObjets(deltaFunctionToProcess);
+            deltaFunctionToProcess = CreateDeltaFunction(deltaFunctionToProcess);
 
             var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>();
             var states = new List<string>();
@@ -79,35 +79,6 @@ namespace FiniteAutomata
                 informalDefinition: $"Regex: {RegexAsString(regex)}");
         }
 
-        private static Dictionary<Tuple<string, List<object>>, List<string>> GroupObjets(Dictionary<Tuple<string, List<object>>, List<string>> deltaFunction)
-        {
-            var hasProcessedAtleastOne = false;
-            var newDeltaFunction = new Dictionary<Tuple<string, List<object>>, List<string>>();
-            foreach (var key in deltaFunction.Keys)
-            {
-                var state = key.Item1;
-                var transition = key.Item2;
-
-                if (transition.Count == 1)
-                {
-                    continue;
-                }
-                else
-                {
-                    hasProcessedAtleastOne = true;
-
-                    // Group and split up the List<object> in the tuple and determine what new states it should go to.
-                }
-            }
-
-            if (hasProcessedAtleastOne)
-            {
-                newDeltaFunction = GroupObjets(newDeltaFunction);
-            }
-
-            return newDeltaFunction;
-        }
-
         public static string RegexAsString(List<object> regex)
         {
             var result = string.Empty;
@@ -141,6 +112,41 @@ namespace FiniteAutomata
             }
 
             return result;
+        }
+
+        private static Dictionary<Tuple<string, List<object>>, List<string>> CreateDeltaFunction(Dictionary<Tuple<string, List<object>>, List<string>> deltaFunction)
+        {
+            var hasProcessedAtleastOne = false;
+            var newDeltaFunction = new Dictionary<Tuple<string, List<object>>, List<string>>();
+            foreach (var key in deltaFunction.Keys)
+            {
+                var state = key.Item1;
+                var transition = key.Item2;
+
+                if (transition.Count == 1)
+                {
+                    continue;
+                }
+                else
+                {
+                    hasProcessedAtleastOne = true;
+                    var newGroups = GroupRegexMembers(transition);
+
+                    // Group and split up the List<object> in the tuple and determine what new states it should go to.
+                }
+            }
+
+            if (hasProcessedAtleastOne)
+            {
+                newDeltaFunction = CreateDeltaFunction(newDeltaFunction);
+            }
+
+            return newDeltaFunction;
+        }
+
+        private static List<List<object>> GroupRegexMembers(List<object> regexToGroup)
+        {
+            return null;
         }
     }
 }
