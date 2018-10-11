@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\OperatorsEnum.cs" />
     <Compile Include="DFA.cs" />
     <Compile Include="DFAFactory\DFAFactory.cs" />
     <Compile Include="NFA.cs" />

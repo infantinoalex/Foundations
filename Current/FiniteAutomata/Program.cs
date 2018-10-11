@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FiniteAutomata.Constants;
 using FiniteAutomata.DFAFactory;
 using FiniteAutomata.NFAFactory;
 
@@ -50,35 +51,44 @@ namespace FiniteAutomata
             //Console.WriteLine("All words have been checked using NFAs.\nPress [Enter] to check the converter.");
             //Console.ReadLine();
 
-            Console.WriteLine("Converting NFAs to DFAs");
-            var nfaToConvert = NFAToDFAFactory.CreateNFAs();
-            foreach (var nfa in nfaToConvert)
-            {            
-                var convertedDFA = nfa.ConvertToDFA();
-                Console.WriteLine($"NFA:\n{nfa.DeltaFunctionTableAsString()}\n");
-                Console.WriteLine($"Converted DFA:\n{convertedDFA.DeltaFunctionTableAsString()}\n");
+            //Console.WriteLine("Converting NFAs to DFAs");
+            //var nfaToConvert = NFAToDFAFactory.CreateNFAs();
+            //foreach (var nfa in nfaToConvert)
+            //{            
+            //    var convertedDFA = nfa.ConvertToDFA();
+            //    Console.WriteLine($"NFA:\n{nfa.DeltaFunctionTableAsString()}\n");
+            //    Console.WriteLine($"Converted DFA:\n{convertedDFA.DeltaFunctionTableAsString()}\n");
 
-                foreach (var word in wordsToCheck)
-                {
-                    var nfaResult = nfa.Execute(word);
-                    var nfaAcceptedRejected = nfaResult ? "accepted" : "rejected";
+            //    foreach (var word in wordsToCheck)
+            //    {
+            //        var nfaResult = nfa.Execute(word);
+            //        var nfaAcceptedRejected = nfaResult ? "accepted" : "rejected";
 
-                    var dfaResult = convertedDFA.Execute(word);
-                    var dfaAcceptedRejected = dfaResult ? "accepted" : "rejected";
+            //        var dfaResult = convertedDFA.Execute(word);
+            //        var dfaAcceptedRejected = dfaResult ? "accepted" : "rejected";
 
-                    if (nfaResult != dfaResult)
-                    {
-                        Console.WriteLine($"Error converting NFA to DFA.\nTested word: [{word}] and got result [{nfaAcceptedRejected}] from NFA and got result [{dfaAcceptedRejected}] from DFA.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Testing [{word}] received the same result of [{nfaAcceptedRejected}] from both NFA and DFA.");
-                    }
-                }
+            //        if (nfaResult != dfaResult)
+            //        {
+            //            Console.WriteLine($"Error converting NFA to DFA.\nTested word: [{word}] and got result [{nfaAcceptedRejected}] from NFA and got result [{dfaAcceptedRejected}] from DFA.");
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine($"Testing [{word}] received the same result of [{nfaAcceptedRejected}] from both NFA and DFA.");
+            //        }
+            //    }
+            //}
+
+            //Console.WriteLine("All words have been checked using NFAs and the converted DFAs.\nPress [Enter] to check the Regex converter.");
+            //Console.ReadLine();
+
+            Console.WriteLine("Converting Regex -> NFA");
+            var regexes = CreatedRegexes();
+            foreach (var regex in regexes)
+            {
+                Console.WriteLine($"Regex: {RegularExpression.RegexAsString(regex)}");
+                var nfa = RegularExpression.ConvertToNFA(regex);
+                Console.WriteLine($"Regex as NFA: {nfa.DeltaFunctionTableAsString()}");
             }
-
-            Console.WriteLine("All words have been checked using NFAs and the converted DFAs.\nPress [Enter] exit.");
-            Console.ReadLine();
         }
 
         public static List<string> CreateWordsToCheck()
@@ -95,6 +105,27 @@ namespace FiniteAutomata
                 "111111110",
                 "01111111",
             };
+        }
+
+        public static List<List<object>> CreatedRegexes()
+        {
+            var regex = new List<List<object>>();
+            regex.Add(new List<object>
+            {
+                OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION,OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS
+            });
+
+            //regex.Add(new List<object>
+            //{
+            //    OperatorsEnum.KLEENE, '1', '1', '0'
+            //});
+
+            //regex.Add(new List<object>
+            //{
+            //    OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION, '2', OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.CLOSEPARENS, '2', '2', '1'
+            //});
+
+            return regex;
         }
     }
 }
