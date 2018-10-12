@@ -110,10 +110,26 @@ namespace FiniteAutomata
         public static List<List<object>> CreatedRegexes()
         {
             var regex = new List<List<object>>();
+
             regex.Add(new List<object>
             {
-                OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS
+                '1', OperatorsEnum.CONCAT, '1', OperatorsEnum.KLEENE
             });
+
+            regex.Add(new List<object>
+            {
+                '1', OperatorsEnum.KLEENE
+            });
+
+            regex.Add(new List<object>
+            {
+                '1', OperatorsEnum.UNION, '0'
+            });
+
+            //regex.Add(new List<object>
+            //{
+            //    OperatorsEnum.OPENPARENS, OperatorsEnum.OPENPARENS, '1', OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS, OperatorsEnum.KLEENE, OperatorsEnum.UNION, '0', OperatorsEnum.CLOSEPARENS
+            //});
 
             //regex.Add(new List<object>
             //{

@@ -142,7 +142,7 @@ namespace FiniteAutomata
                 {
                     for (int i = 0; i < this.Alphabet.Count; i++)
                     {
-                        result += "\n\n\n\n";
+                        result += "\t\t\t\t";
                     }
                 }
                 else

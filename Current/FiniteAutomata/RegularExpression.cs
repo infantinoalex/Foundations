@@ -7,6 +7,44 @@ namespace FiniteAutomata
 {
     public static class RegularExpression
     {
+        public static string RegexAsString(List<object> regex)
+        {
+            var result = string.Empty;
+            foreach (var item in regex)
+            {
+                if (item.GetType() == typeof(OperatorsEnum))
+                {
+                    switch (item)
+                    {
+                        case OperatorsEnum.KLEENE:
+                            result += "*";
+                            break;
+                        case OperatorsEnum.CONCAT:
+                            result += string.Empty;
+                            break;
+                        case OperatorsEnum.UNION:
+                            result += " U ";
+                            break;
+                        case OperatorsEnum.OPENPARENS:
+                            result += "(";
+                            break;
+                        case OperatorsEnum.CLOSEPARENS:
+                            result += ")";
+                            break;
+                        case OperatorsEnum.EMPTY:
+                            result += string.Empty;
+                            break;
+                    }
+                }
+                else
+                {
+                    result += (char)item;
+                }
+            }
+
+            return result;
+        }
+
         public static NFA ConvertToNFA(List<object> regex)
         {
             // Do the conversions here
@@ -56,9 +94,21 @@ namespace FiniteAutomata
 
                 var resultingStates = deltaFunctionToProcess[key];
 
-                deltaFunction.Add(new Tuple<string, char>(state, character), resultingStates);
-                states.Add(state);
-                states.AddRange(resultingStates);
+                var newKey = new Tuple<string, char>(state, character);
+                if (deltaFunction.ContainsKey(newKey))
+                {
+                    deltaFunction[newKey].AddRange(resultingStates);
+                    deltaFunction[newKey].Distinct().ToList();
+
+                    states.AddRange(resultingStates);
+                    states = states.Distinct().ToList();
+                }
+                else
+                {
+                    deltaFunction.Add(new Tuple<string, char>(state, character), resultingStates);
+                    states.Add(state);
+                    states.AddRange(resultingStates);
+                }
             }
 
             states = states.Distinct().ToList();
@@ -79,203 +129,205 @@ namespace FiniteAutomata
                 informalDefinition: $"Regex: {RegexAsString(regex)}");
         }
 
-        public static string RegexAsString(List<object> regex)
-        {
-            var result = string.Empty;
-            foreach (var item in regex)
-            {
-                if (item.GetType() == typeof(OperatorsEnum))
-                {
-                    switch (item)
-                    {
-                        case OperatorsEnum.KLEENE:
-                            result += "*";
-                            break;
-                        case OperatorsEnum.CONCAT:
-                            result += string.Empty;
-                            break;
-                        case OperatorsEnum.UNION:
-                            result += " U ";
-                            break;
-                        case OperatorsEnum.OPENPARENS:
-                            result += "(";
-                            break;
-                        case OperatorsEnum.CLOSEPARENS:
-                            result += ")";
-                            break;
-                        case OperatorsEnum.EMPTY:
-                            result += string.Empty;
-                            break;
-                    }
-                }
-                else
-                {
-                    result += (char) item;
-                }
-            }
-
-            return result;
-        }
-
         private static Dictionary<Tuple<string, List<object>>, List<string>> CreateDeltaFunction(Dictionary<Tuple<string, List<object>>, List<string>> deltaFunction)
         {
-            var hasProcessedAtleastOne = false;
-            var newDeltaFunction = new Dictionary<Tuple<string, List<object>>, List<string>>();
+            var hasProcessedAtLeastOne = false;
+
+            var newDeltaFunctionEntries = new List<Dictionary<Tuple<string, List<object>>, List<string>>>();
             foreach (var key in deltaFunction.Keys)
             {
-                var state = key.Item1;
-                var transition = key.Item2;
+                var currentState = key.Item1;
+                var regex = key.Item2;
                 var nextStates = deltaFunction[key];
 
-                if (transition.Count == 1)
+                if (regex.Count == 1)
                 {
+                    // We have found a transition with a single character so it does not need to be looked at any more
+                    newDeltaFunctionEntries.Add(
+                        new Dictionary<Tuple<string, List<object>>, List<string>>
+                        {
+                            {  key, deltaFunction[key] }
+                        });
                     continue;
                 }
                 else
                 {
-                    hasProcessedAtleastOne = true;
-                    var newGroups = GroupRegexMembers(transition);
+                    hasProcessedAtLeastOne = true;
 
-                    foreach (var operatorsEnum in newGroups.Keys)
-                    {
-                        switch (operatorsEnum)
-                        {
-                            case OperatorsEnum.KLEENE:
-                                var newKleeneStates = ConvertKleeneExpression(newGroups[operatorsEnum].Item1, state, nextStates);
-                                var dictionariesWithNewKleeneStates = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newKleeneStates, newDeltaFunction };
-                                newDeltaFunction = dictionariesWithNewKleeneStates.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
-                                break;
-                            case OperatorsEnum.UNION:
-                                var newUnionStates = ConvertUnionExpression(newGroups[operatorsEnum].Item1, newGroups[operatorsEnum].Item2, state, nextStates);
-                                var dictionariesWithNewUnionStates = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newUnionStates, newDeltaFunction };
-                                newDeltaFunction = dictionariesWithNewUnionStates.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
-                                break;
-                            case OperatorsEnum.CONCAT:
-                                var newConcatStates = ConvertConcataExpression(newGroups[operatorsEnum].Item1, newGroups[operatorsEnum].Item2, state, nextStates);
-                                var dictionariesWithNewConcatStates = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newConcatStates, newDeltaFunction };
-                                newDeltaFunction = dictionariesWithNewConcatStates.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
-                                break;
-                            case OperatorsEnum.EMPTY:
-                                var newEmptyStates = ConvertEmptyExpression(state, nextStates);
-                                var dictionariesWithNewEmptyStates = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newEmptyStates, newDeltaFunction };
-                                newDeltaFunction = dictionariesWithNewEmptyStates.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
-                                break;
-                            case OperatorsEnum.SYMBOL:
-                                var newSymbolStates = ConvertSymbolExpression(newGroups[operatorsEnum].Item1, state, nextStates);
-                                var dictionariesWithNewSymbolStates = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newSymbolStates, newDeltaFunction };
-                                newDeltaFunction = dictionariesWithNewSymbolStates.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
-                                break;
-                        }
-                    }
+                    var newDeltaFunction = GetDeltaFunction(regex, currentState, nextStates);
+                    var newDeltaFunctionWithRecursion = CreateDeltaFunction(newDeltaFunction);
+
+                    newDeltaFunctionEntries.Add(newDeltaFunctionWithRecursion);
                 }
             }
 
-            if (hasProcessedAtleastOne)
+            if (!hasProcessedAtLeastOne)
             {
-                var newDeltaFunctionRecursion = CreateDeltaFunction(newDeltaFunction);
-                var dictionariesWithRecursion = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { newDeltaFunctionRecursion, newDeltaFunction };
-                newDeltaFunction = dictionariesWithRecursion.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
+                return deltaFunction;
             }
 
-            return newDeltaFunction;
+            return newDeltaFunctionEntries.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
-        private static Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>> GroupRegexMembers(List<object> regexToGroup)
+        private static Dictionary<Tuple<string, List<object>>, List<string>> GetDeltaFunction(List<object> regex, string currentState, List<string> nextStates)
         {
-            // Split into two groups by the most prominent OperatorsEnum
-            var openParensCount = 0;
-            var index = 0;
+            var deltaFunction = new Dictionary<Tuple<string, List<object>>, List<string>>();
 
-            if (regexToGroup.Count == 1)
+            var simplifiedRegex = RemoveRedundantParentheses(regex);
+            var indexToSplit = FindMostImportantOperandIndex(simplifiedRegex);
+
+            var operatorEnum = (OperatorsEnum) regex[indexToSplit];
+            switch (operatorEnum)
             {
-                if (regexToGroup[0].GetType() == typeof(OperatorsEnum) && (OperatorsEnum)regexToGroup[0] == OperatorsEnum.EMPTY)
+                case OperatorsEnum.KLEENE:
+                    var leftHandKleene = regex.GetRange(0, indexToSplit);
+                    var kleeneTransition = ConvertKleeneExpression(leftHandKleene, currentState, nextStates);
+
+                    deltaFunction = MergeTwoDictionaries(deltaFunction, kleeneTransition);
+
+                    break;
+                case OperatorsEnum.UNION:
+                    var leftHandUnion = regex.GetRange(0, indexToSplit);
+
+                    var rightHandUnionCount = regex.Count() - indexToSplit - 1;
+                    var rightHandUnion = regex.GetRange(indexToSplit + 1, rightHandUnionCount);
+                    var unionTransition = ConvertUnionExpression(leftHandUnion, rightHandUnion, currentState, nextStates);
+
+                    deltaFunction = MergeTwoDictionaries(deltaFunction, unionTransition);
+
+                    break;
+                case OperatorsEnum.CONCAT:
+                    var leftHandConcat = regex.GetRange(0, indexToSplit);
+
+                    var rightHandConcatCount = regex.Count() - indexToSplit - 1;
+                    var rightHandConcat = regex.GetRange(indexToSplit + 1, rightHandConcatCount);
+                    var rightHandConcatDictionary = ConvertConcataExpression(leftHandConcat, rightHandConcat, currentState, nextStates);
+
+                    deltaFunction = MergeTwoDictionaries(deltaFunction, rightHandConcatDictionary);
+
+                    break;
+                case OperatorsEnum.EMPTY:
+                    var emptyTransition = ConvertEmptyExpression(currentState, nextStates);
+
+                    deltaFunction = MergeTwoDictionaries(deltaFunction, emptyTransition);
+
+                    break;
+                default:
+                    var symbolTransition = ConvertSymbolExpression(new List<object> { regex[indexToSplit] } , currentState, nextStates);
+
+                    deltaFunction = MergeTwoDictionaries(deltaFunction, symbolTransition);
+
+                    break;
+            }
+
+            return deltaFunction;
+        }
+
+        private static int FindMostImportantOperandIndex(List<object> regex)
+        {
+            var paranthesesCount = 0;
+            var currentIndex = 0;
+            OperatorsEnum? mostImportant = null;
+            var mostImportantIndex = 0;
+
+            foreach (var item in regex)
+            {
+                if (item.GetType() == typeof(OperatorsEnum))
                 {
-                    return new Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>>
+                    var operators = (OperatorsEnum)item;
+                    switch (operators)
                     {
-                        { OperatorsEnum.EMPTY, null }
-                    };
+                        case OperatorsEnum.KLEENE:
+                            if (paranthesesCount == 0)
+                            {
+                                if (mostImportant.HasValue)
+                                {
+                                    if (mostImportant != OperatorsEnum.UNION || mostImportant != OperatorsEnum.CONCAT)
+                                    {
+                                        mostImportantIndex = currentIndex;
+                                    }
+                                }
+                            }
+
+                            break;
+                        case OperatorsEnum.OPENPARENS:
+                            paranthesesCount++;
+                            break;
+                        case OperatorsEnum.CLOSEPARENS:
+                            paranthesesCount--;
+                            break;
+                        case OperatorsEnum.UNION:
+                            if (paranthesesCount == 0)
+                            {
+                                return currentIndex;
+                            }
+
+                            break;
+                        case OperatorsEnum.CONCAT:
+                            if (paranthesesCount == 0)
+                            {
+                                return currentIndex;
+                            }
+
+                            break;
+                    }
+
                 }
 
-                return new Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>>
-                {
-                    { OperatorsEnum.SYMBOL, new Tuple<List<object>, List<object>>(regexToGroup, null) }
-                };
+                currentIndex++;
             }
 
-            var firstObject = regexToGroup.First();
-            var isStartingParens = false;
-            if (firstObject.GetType() == typeof(OperatorsEnum) && (OperatorsEnum) firstObject == OperatorsEnum.OPENPARENS)
+            return currentIndex - 1;
+        }
+
+        private static List<object> RemoveRedundantParentheses(List<object> regex)
+        {
+            var firstItem = regex.First();
+            if (firstItem.GetType() == typeof(OperatorsEnum) && (OperatorsEnum) firstItem == OperatorsEnum.OPENPARENS)
             {
-                isStartingParens = true;
-                regexToGroup.RemoveAt(0);
-                openParensCount = 0;
-            }
-            foreach (var item in regexToGroup)
-            {
-                if (!isStartingParens)
+                regex.RemoveAt(0);
+                var otherParenthesesIndex = 0;
+                var openParenthesesCount = 0;
+
+                foreach (var item in regex)
                 {
                     if (item.GetType() == typeof(OperatorsEnum))
                     {
                         var operators = (OperatorsEnum)item;
                         switch (operators)
                         {
-                            case OperatorsEnum.KLEENE:
-                                var kleeneCount = regexToGroup.Count();
-                                var kleeneLeftHandSide = regexToGroup.GetRange(0, index);
-                                return new Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>>
-                                {
-                                    { OperatorsEnum.KLEENE, new Tuple<List<object>, List<object>>(kleeneLeftHandSide, null) }
-                                };
-                            case OperatorsEnum.UNION:
-                                var unionCount = regexToGroup.Count();
-                                var unionLeftHandSide = regexToGroup.GetRange(0, index);
-                                var unionRightHandSide = regexToGroup.GetRange(index + 1, unionCount - unionLeftHandSide.Count() - 1);
-                                return new Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>>
-                                {
-                                    { OperatorsEnum.UNION, new Tuple<List<object>, List<object>>(unionLeftHandSide, unionRightHandSide) }
-                                };
-                            case OperatorsEnum.CONCAT:
-                                var concatCount = regexToGroup.Count();
-                                var concatLeftHandSide = regexToGroup.GetRange(0, index);
-                                var concatRightHandSide = regexToGroup.GetRange(index + 1, concatCount - concatLeftHandSide.Count());
-                                return new Dictionary<OperatorsEnum, Tuple<List<object>, List<object>>>
-                                {
-                                    { OperatorsEnum.CONCAT, new Tuple<List<object>, List<object>>(concatLeftHandSide, concatRightHandSide) }
-                                };
-                        }
-                    }
-                }
-                else
-                {
-                    if (item.GetType() == typeof(OperatorsEnum))
-                    {
-                        var operators = (OperatorsEnum) item;
-                        switch (operators)
-                        {
                             case OperatorsEnum.OPENPARENS:
-                                openParensCount++;
+                                openParenthesesCount++;
                                 break;
                             case OperatorsEnum.CLOSEPARENS:
-                                if (openParensCount == 0)
+                                if (openParenthesesCount == 0)
                                 {
-                                    var count = regexToGroup.Count();
-                                    var innerParaenthasis = regexToGroup.GetRange(0, index);
-                                    var innerParens = GroupRegexMembers(innerParaenthasis);
-
+                                    regex.RemoveAt(otherParenthesesIndex);
+                                    return regex;
                                 }
                                 else
                                 {
-                                    openParensCount--;
+                                    openParenthesesCount--;
                                 }
                                 break;
                         }
                     }
+
+                    otherParenthesesIndex++;
                 }
 
-                index++;
+                throw new Exception("Could not remove the extra parentheses. Error occurred.");
             }
+            else
+            {
+                return regex;
+            }
+        }
 
-            return null;
+        public static Dictionary<Tuple<string, List<object>>, List<string>> MergeTwoDictionaries(Dictionary<Tuple<string, List<object>>, List<string>> first, Dictionary<Tuple<string, List<object>>, List<string>> second)
+        {
+            var dictionariesList = new List<Dictionary<Tuple<string, List<object>>, List<string>>> { first, second };
+            return dictionariesList.SelectMany(dict => dict).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         private static Dictionary<Tuple<string, List<object>>, List<string>> ConvertEmptyExpression(string currentState, List<string> nextState)
@@ -296,22 +348,20 @@ namespace FiniteAutomata
 
         private static Dictionary<Tuple<string, List<object>>, List<string>> ConvertUnionExpression(List<object> leftHandSide, List<object> rightHandSide, string currentState, List<string> nextState)
         {
-            var leftHandSideState = RegexAsString(leftHandSide) + "-LeftHandSide";
-            var rightHandSideState = RegexAsString(rightHandSide) + "-RightHandSide";
+            var leftHandSideState = RegexAsString(leftHandSide) + "-LeftHandSide-" + Guid.NewGuid().ToString();
+            var rightHandSideState = RegexAsString(rightHandSide) + "-RightHandSide-" + Guid.NewGuid().ToString();
 
             return new Dictionary<Tuple<string, List<object>>, List<string>>
             {
-                { new Tuple<string, List<object>>(currentState, rightHandSide), new List<string> { rightHandSideState }  },
-                { new Tuple<string, List<object>>(currentState, leftHandSide), new List<string> { leftHandSideState }  },
-                { new Tuple<string, List<object>>(rightHandSideState, new List<object> { '\0' } ), nextState },
-                { new Tuple<string, List<object>>(leftHandSideState, new List<object> { '\0' } ), nextState }
+                { new Tuple<string, List<object>>(currentState, rightHandSide), nextState },
+                { new Tuple<string, List<object>>(currentState, leftHandSide), nextState },
             };
         }
 
         private static Dictionary<Tuple<string, List<object>>, List<string>> ConvertConcataExpression(List<object> leftHandSide, List<object> rightHandSide, string currentState, List<string> nextState)
         {
-            var leftHandSideState = RegexAsString(leftHandSide) + "-LeftHandSide";
-            var rightHandSideState = RegexAsString(rightHandSide) + "-RightHandSide";
+            var leftHandSideState = RegexAsString(leftHandSide) + "-LeftHandSide-" + Guid.NewGuid().ToString();
+            var rightHandSideState = RegexAsString(rightHandSide) + "-RightHandSide-" + Guid.NewGuid().ToString();
 
             return new Dictionary<Tuple<string, List<object>>, List<string>>
             {
@@ -322,8 +372,8 @@ namespace FiniteAutomata
 
         private static Dictionary<Tuple<string, List<object>>, List<string>> ConvertKleeneExpression(List<object> kleeneExpression, string currentState, List<string> nextState)
         {
-            var kleeneState1 = RegexAsString(kleeneExpression) + "-State1";
-            var kleeneState2 = RegexAsString(kleeneExpression) + "-State2";
+            var kleeneState1 = RegexAsString(kleeneExpression) + "-State1-" + Guid.NewGuid().ToString();
+            var kleeneState2 = RegexAsString(kleeneExpression) + "-State2-" + Guid.NewGuid().ToString();
 
             return new Dictionary<Tuple<string, List<object>>, List<string>>
             {
