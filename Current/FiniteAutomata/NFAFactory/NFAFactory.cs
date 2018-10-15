@@ -18,6 +18,87 @@ namespace FiniteAutomata.NFAFactory
             return nfas;
         }
 
+        public static NFA Problem1_7_a_NFA()
+        {
+            var states = new List<string>
+            {
+                "q1", "q2", "q3"
+            };
+
+            var alphabet = new List<char>
+            {
+                '1', '0'
+            };
+
+            const string startingState = "q1";
+            var acceptingStates = new List<string>
+            {
+                "q3",
+            };
+
+            var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>
+            {
+                { new Tuple<string, char>("q1", '1'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q1", '0'), new List<string> { "q1", "q2" } },
+                { new Tuple<string, char>("q2", '1'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q2", '0'), new List<string> { "q3" } },
+                { new Tuple<string, char>("q3", '1'), new List<string> { "q1" } },
+                { new Tuple<string, char>("q3", '0'), new List<string> { } },
+            };
+
+            return new NFA(
+                states: states,
+                alphabet: alphabet,
+                startingState: startingState,
+                deltaFunction: deltaFunction,
+                acceptingStates: acceptingStates,
+                informalDefinition: "Contains neither the substring ab or ba");
+        }
+
+        public static NFA Problem1_7_c_NFA()
+        {
+            var states = new List<string>
+            {
+                "q1", "q2", "q3", "q4", "q5", "q6"
+            };
+
+            var alphabet = new List<char>
+            {
+                '1', '0'
+            };
+
+            const string startingState = "q1";
+            var acceptingStates = new List<string>
+            {
+                "q1", "q2", "q6"
+            };
+
+            var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>
+            {
+                { new Tuple<string, char>("q1", '0'), new List<string> { } },
+                { new Tuple<string, char>("q1", '1'), new List<string> { } },
+                { new Tuple<string, char>("q1", '\0'), new List<string> { "q2", "q4" } },
+                { new Tuple<string, char>("q2", '0'), new List<string> { "q3" } },
+                { new Tuple<string, char>("q2", '1'), new List<string> { "q2" } },
+                { new Tuple<string, char>("q3", '0'), new List<string> { "q2"} },
+                { new Tuple<string, char>("q3", '1'), new List<string> { "q3" } },
+                { new Tuple<string, char>("q4", '0'), new List<string> { "q4" } },
+                { new Tuple<string, char>("q4", '1'), new List<string> { "q5" } },
+                { new Tuple<string, char>("q5", '0'), new List<string> { "q5" } },
+                { new Tuple<string, char>("q5", '1'), new List<string> { "q6" } },
+                { new Tuple<string, char>("q6", '0'), new List<string> { "q6" } },
+                { new Tuple<string, char>("q6", '1'), new List<string> { } },
+            };
+
+            return new NFA(
+                states: states,
+                alphabet: alphabet,
+                startingState: startingState,
+                deltaFunction: deltaFunction,
+                acceptingStates: acceptingStates,
+                informalDefinition: "Contains an even number of 0's or exactly two 1's");
+        }
+
         public static NFA IsEvenLengthOrOddNumber()
         {
             var states = new List<string>

@@ -74,7 +74,7 @@ namespace FiniteAutomata
             {
                 if (!currentStates.Any(state => this.States.Contains(state)))
                 {
-                    throw new InvalidOperationException($"The current states of: [{currentStates}] was not found in the list of possible states: {this.States}");
+                    return false;
                 }
 
                 if (!this.Alphabet.Contains(letter))
