@@ -9,12 +9,13 @@ namespace FiniteAutomata
         public static void Main(string[] args)
         {
             // Homework problems for DFA check
-            CheckProblem1_4_a();
-            CheckProblem1_5_c();
+            //CheckProblem1_4_a();
+            //CheckProblem1_5_c();
 
             // Homework problems for NFA check
-            CheckProblem1_7_a();
-            CheckProblem1_7_c();
+            //CheckProblem1_7_a();
+            //CheckProblem1_7_c();
+            //CheckProblemInClass();
 
             // Homework problems for Regex check
             CheckProblem1_20_c();
@@ -126,6 +127,19 @@ namespace FiniteAutomata
             }
 
             Console.WriteLine("All words checked for 1.7.c with the converted DFA. Press [Enter] to exit/continue.");
+            Console.ReadLine();
+        }
+
+        public static void CheckProblemInClass()
+        {
+            Console.WriteLine("Checking problem in class results:\n");
+            var nfa = NFAFactory.NFAFactory.Problem_In_Class_NFA();
+
+            Console.WriteLine("Converting the NFA -> DFA");
+            var dfa = nfa.ConvertToDFA();
+
+            Console.WriteLine($"Resulting DFA:\n{dfa.DeltaFunctionTableAsString()}");
+            Console.WriteLine("In class problem has been checked.\nPress [Enter] to exit.");
             Console.ReadLine();
         }
 

@@ -99,6 +99,43 @@ namespace FiniteAutomata.NFAFactory
                 informalDefinition: "Contains an even number of 0's or exactly two 1's");
         }
 
+        public static NFA Problem_In_Class_NFA()
+        {
+            var states = new List<string>
+            {
+                "a", "b", "c"
+            };
+
+            var alphabet = new List<char>
+            {
+                '1', '0'
+            };
+
+            const string startingState = "a";
+            var acceptingStates = new List<string>
+            {
+                "c",
+            };
+
+            var deltaFunction = new Dictionary<Tuple<string, char>, List<string>>
+            {
+                { new Tuple<string, char>("a", '0'), new List<string> { "a", "b", "c" } },
+                { new Tuple<string, char>("a", '1'), new List<string> { "b", "c" } },
+                { new Tuple<string, char>("b", '0'), new List<string> { "a" } },
+                { new Tuple<string, char>("b", '1'), new List<string> { "b" } },
+                { new Tuple<string, char>("c", '0'), new List<string> { "c" } },
+                { new Tuple<string, char>("c", '1'), new List<string> { } },
+            };
+
+            return new NFA(
+                states: states,
+                alphabet: alphabet,
+                startingState: startingState,
+                deltaFunction: deltaFunction,
+                acceptingStates: acceptingStates,
+                informalDefinition: "In Class Check");
+        }
+
         public static NFA IsEvenLengthOrOddNumber()
         {
             var states = new List<string>
