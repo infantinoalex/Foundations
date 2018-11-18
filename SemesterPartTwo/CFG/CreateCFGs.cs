@@ -17,5 +17,20 @@ namespace SemesterPartTwo.CFG
             var cfg = new CFG(symbols, alphabet, rules, startSymbol);
             return cfg;
         }
+
+        public static CFG CreateChrisCFG()
+        {
+            var symbols = new List<char> { 'A', 'B' };
+            var alphabet = new List<char> { '0', '1' };
+            var rules = new Dictionary<char, List<string>>
+            {
+                { 'A', new List<string> { "0", "1", "AB" } },
+                { 'B', new List<string> { "01", string.Empty }}
+            };
+            var startSymbol = 'A';
+
+            var cfg = new CFG(symbols, alphabet, rules, startSymbol);
+            return cfg;
+        }
     }
 }

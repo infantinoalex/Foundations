@@ -28,6 +28,49 @@ namespace SemesterPartTwo.CFG
 
         public char StartSymbol;
 
+        public List<string> CalculateStringsInLanguageOfDepthWithMultipleSymbols(int depth)
+        {
+            var currentStrings = new List<string>();
+            if (depth == 0)
+            {
+                return currentStrings;
+            }
+
+            currentStrings.Add(this.StartSymbol.ToString());
+            var result = new List<string>();
+            for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
+            {
+                var newStrings = new List<string>();
+                foreach (var currentString in currentStrings)
+                {
+                    var possibleTransformationsDictionary = this.ProcessString(currentString);
+                    var thisLevelChanges = new List<string>();
+                    foreach (var key in possibleTransformationsDictionary.Keys)
+                    {
+                        var possibleTransformations = possibleTransformationsDictionary[key];
+
+                        var recalculatedStrings = new List<string>();
+                        foreach (var transformation in possibleTransformations)
+                        {
+                            var firstHalf = currentString.Substring(0, key);
+                            var secondHalf = currentString.Substring(key + 1);
+                            var recalculatedResult = firstHalf + transformation + secondHalf;
+                            recalculatedStrings.Add(recalculatedResult);
+                        }
+
+                        newStrings.AddRange(recalculatedStrings);
+                    }
+                }
+
+                currentStrings = newStrings.Distinct().ToList();
+                result.AddRange(newStrings.Distinct().ToList());
+            }
+
+            result = result.Where(currentString => !this.Symbols.Any(symbol => currentString.Contains(symbol))).ToList();
+            result = result.Distinct().OrderByDescending(c => c).ToList();
+            return result;
+        }
+
         public List<string> CalculateStringsInLanguageOfDepth(int depth)
         {
             var currentStrings = new List<string>();
@@ -61,11 +104,12 @@ namespace SemesterPartTwo.CFG
                     }
                 }
 
-                currentStrings = newStrings;
-                result.AddRange(newStrings);
+                currentStrings = newStrings.Distinct().ToList();
+                result.AddRange(newStrings.Distinct().ToList());
             }
 
             result = result.Where(currentString => !this.Symbols.Any(symbol => currentString.Contains(symbol))).ToList();
+            result = result.Distinct().OrderByDescending(c => c).ToList();
             return result;
         }
 
@@ -87,9 +131,9 @@ namespace SemesterPartTwo.CFG
             return result;
         }
 
-        public string RandomStringFromCFG()
+        public string RandomStringFromCFG(int maxDepth)
         {
-            var randomDepth = random.Next(1, 100);
+            var randomDepth = random.Next(1, maxDepth);
             var results = this.CalculateStringsInLanguageOfDepth(randomDepth);
 
             var randomIndex = random.Next(0, results.Count - 1);
