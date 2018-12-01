@@ -1,5 +1,6 @@
 ﻿using SemesterPartTwo.CFG;
 using SemesterPartTwo.PDA;
+using SemesterPartTwo.TM;
 using System;
 using System.Collections.Generic;
 
@@ -9,24 +10,24 @@ namespace SemesterPartTwo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Testing out CFG Creation");
+            //Console.WriteLine("Testing out CFG Creation");
 
-            var inClassCFG = CreateCFGs.CreateInClassCFG();
-            for (int counter = 0; counter < 5; counter++)
-            {
-                var result = inClassCFG.CalculateStringsInLanguageOfDepth(counter);
-                result.Reverse();
-                Console.WriteLine($"Strings in the language of depth: {counter} are: {string.Join(",", result)}");
-            }
+            //var inClassCFG = CreateCFGs.CreateInClassCFG();
+            //for (int counter = 0; counter < 5; counter++)
+            //{
+            //    var result = inClassCFG.CalculateStringsInLanguageOfDepth(counter);
+            //    result.Reverse();
+            //    Console.WriteLine($"Strings in the language of depth: {counter} are: {string.Join(",", result)}");
+            //}
 
-            for (int counter = 0; counter < 10; counter++)
-            {
-                var result = inClassCFG.RandomStringFromCFG(100);
-                Console.WriteLine($"Random string from the language: {result}");
-            }
+            //for (int counter = 0; counter < 10; counter++)
+            //{
+            //    var result = inClassCFG.RandomStringFromCFG(100);
+            //    Console.WriteLine($"Random string from the language: {result}");
+            //}
 
-            Console.WriteLine("Done. Press [Enter] to continue.");
-            Console.ReadLine();
+            //Console.WriteLine("Done. Press [Enter] to continue.");
+            //Console.ReadLine();
 
             //Console.WriteLine("Testing Chris's CFG to see if we get similar results");
             //var chrisCFG = CreateCFGs.CreateChrisCFG();
@@ -46,14 +47,30 @@ namespace SemesterPartTwo
             //Console.WriteLine("Done. Press [Enter] to continue");
             //Console.ReadLine();
 
-            Console.WriteLine("Checking PDA");
-            var pda = CreatePDA.Create0N1NPDA();
-            foreach (var word in WordsToCheck0N1N())
+            //Console.WriteLine("Checking PDA");
+            //var pda = CreatePDA.Create0N1NPDA();
+            //foreach (var word in WordsToCheck0N1N())
+            //{
+            //    var result = pda.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            Console.WriteLine("Checking TM");
+            var tm = CreateTM.CreateInClassTM();
+
+            foreach (var word in WordsToCheckForTM())
             {
-                var result = pda.Execute(word);
+                var result = tm.Execute(word);
                 var acceptedRejectedString = result ? "accepted" : "rejected";
                 Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
             }
+
+            Console.WriteLine("Done. Press [Enter] to continue");
+            Console.ReadLine();
         }
 
         public static List<string> WordsToCheck0N1N()
@@ -63,6 +80,16 @@ namespace SemesterPartTwo
                 "01",
                 "00001111",
                 "01111"
+            };
+        }
+
+        public static List<string> WordsToCheckForTM()
+        {
+            return new List<string>
+            {
+                "0101#0101",
+                "11#11",
+                "00#11"
             };
         }
     }
