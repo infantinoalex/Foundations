@@ -45,14 +45,14 @@
   <ItemGroup>
     <Compile Include="CFG\CFG.cs" />
     <Compile Include="CFG\CreateCFGs.cs" />
+    <Compile Include="PDA\CreatePDA.cs" />
+    <Compile Include="PDA\PDA.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PDA\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
