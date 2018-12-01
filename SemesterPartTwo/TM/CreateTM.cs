@@ -102,5 +102,84 @@ namespace SemesterPartTwo.TM
                 rejectState: rejectingState,
                 deltaFunction: deltaFunction);
         }
+
+        public static TM Create0WhoseLengthIsPowerTwo()
+        {
+            var states = new List<string>
+            {
+                "q1", "q2", "q3", "q4", "q5", "qa", "qr"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                'x'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "q1";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "q1", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "qr") },
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "qr") },
+                        { '0',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "q2") },
+                    }
+                },
+                {
+                    "q2", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q2") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "qa") },
+                        { '0',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q3") },
+                    }
+                },
+                {
+                    "q3", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q3") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.LEFT, "q5") },
+                        { '0',  new Tuple<char, Direction, string>('0', Direction.RIGHT, "q4") },
+                    }
+                },
+                {
+                    "q4", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q4") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "qr") },
+                        { '0',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q3") },
+                    }
+                },
+                {
+                    "q5", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0',  new Tuple<char, Direction, string>('0', Direction.LEFT, "q5") },
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.LEFT, "q5") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "q2") },
+                    }
+                }
+            };
+
+            return new TM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
     }
 }

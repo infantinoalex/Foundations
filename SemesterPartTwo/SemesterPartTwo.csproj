@@ -46,6 +46,8 @@
     <Compile Include="CFG\CFG.cs" />
     <Compile Include="CFG\CreateCFGs.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="MultiTapeTM\CreateMultiTM.cs" />
+    <Compile Include="MultiTapeTM\MultiTapeTM.cs" />
     <Compile Include="PDA\CreatePDA.cs" />
     <Compile Include="PDA\PDA.cs" />
     <Compile Include="Program.cs" />

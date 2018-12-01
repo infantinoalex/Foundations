@@ -85,7 +85,7 @@ namespace SemesterPartTwo.TM
                     else
                     {
                         currentIndex++;
-                        if (currentIndex > word.Length)
+                        if (currentIndex > internalTape.Length)
                         {
                             internalTape += "_";
                         }

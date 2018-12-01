@@ -59,18 +59,31 @@ namespace SemesterPartTwo
             //Console.WriteLine("Done. Press [Enter] to continue");
             //Console.ReadLine();
 
-            Console.WriteLine("Checking TM");
-            var tm = CreateTM.CreateInClassTM();
+            //Console.WriteLine("Checking TM");
+            //var inClassTM = CreateTM.CreateInClassTM();
 
-            foreach (var word in WordsToCheckForTM())
-            {
-                var result = tm.Execute(word);
-                var acceptedRejectedString = result ? "accepted" : "rejected";
-                Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
-            }
+            //foreach (var word in WordsToCheckForTM())
+            //{
+            //    var result = inClassTM.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
 
-            Console.WriteLine("Done. Press [Enter] to continue");
-            Console.ReadLine();
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            //Console.WriteLine("Checking TM");
+            //var inBookTM = CreateTM.Create0WhoseLengthIsPowerTwo();
+
+            //foreach (var word in WordsToCheckForInBookTM())
+            //{
+            //    var result = inBookTM.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
         }
 
         public static List<string> WordsToCheck0N1N()
@@ -83,13 +96,23 @@ namespace SemesterPartTwo
             };
         }
 
-        public static List<string> WordsToCheckForTM()
+        public static List<string> WordsToCheckForInClassTM()
         {
             return new List<string>
             {
                 "0101#0101",
                 "11#11",
                 "00#11"
+            };
+        }
+
+        public static List<string> WordsToCheckForInBookTM()
+        {
+            return new List<string>
+            {
+                "0000",
+                "00",
+                "00000"
             };
         }
     }
