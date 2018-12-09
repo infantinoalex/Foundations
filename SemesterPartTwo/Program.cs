@@ -85,19 +85,19 @@ namespace SemesterPartTwo
             //Console.WriteLine("Done. Press [Enter] to continue");
             //Console.ReadLine();
 
-            Console.WriteLine("Checking ND TM");
-            var ndTM = CreateTM.CreateInClassNDTM();
-            var upperLimit = 100;
+            //Console.WriteLine("Checking ND TM");
+            //var ndTM = CreateTM.CreateInClassNDTM();
+            //var upperLimit = 100;
 
-            foreach (var word in WordsToCheckForInClassTM())
-            {
-                var result = ndTM.Execute(word, upperLimit);
-                var acceptedRejectedString = result ? "accepted" : "rejected";
-                Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
-            }
+            //foreach (var word in WordsToCheckForInClassTM())
+            //{
+            //    var result = ndTM.Execute(word, upperLimit);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
 
-            Console.WriteLine("Done. Press [Enter] to continue");
-            Console.ReadLine();
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
 
             //Console.WriteLine("Checking Linearly Bounded TM");
             //var inClassTMBounded = CreateTM.CreateInClassTMLinearlyBound();
@@ -124,6 +124,61 @@ namespace SemesterPartTwo
 
             //Console.WriteLine("Done. Press [Enter] to continue");
             //Console.ReadLine();
+
+            //Console.WriteLine("Checking Binary Increment TM");
+            //var binaryIncrement = CreateTM.CreateBinaryIncrement();
+
+            //foreach (var word in BinaryIncrementWords())
+            //{
+            //    var result = binaryIncrement.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            Console.WriteLine("Checking Binary Decrement TM");
+            var binaryAddition = CreateTM.BinaryAdditionTM();
+
+            foreach (var word in BinaryAdditionWords())
+            {
+                var result = binaryAddition.Execute(word);
+                var acceptedRejectedString = result ? "accepted" : "rejected";
+                Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            }
+
+            Console.WriteLine("Done. Press [Enter] to continue");
+            Console.ReadLine();
+        }
+
+        public static List<string> BinaryAdditionWords()
+        {
+            return new List<string>
+            {
+                //"$000001+000001$",
+                "$0010+0010$",
+            };
+        }
+
+        public static List<string> BinaryIncrementWords()
+        {
+            return new List<string>
+            {
+                "$010101010#",
+                "$011111111#",
+                "$0001#",
+            };
+        }
+
+        public static List<string> BinaryDecrement()
+        {
+            return new List<string>
+            {
+                "$010101010$",
+                "$011111111$",
+                "$0001$",
+            };
         }
 
         public static List<string> WordsToCheck0N1N()

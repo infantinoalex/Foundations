@@ -103,6 +103,266 @@ namespace SemesterPartTwo.TM
                 deltaFunction: deltaFunction);
         }
 
+        public static TM CreateBinaryIncrement()
+        {
+            var states = new List<string>
+            {
+                "a", "b", "c", "qa"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "a", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '$',  new Tuple<char, Direction, string>('$', Direction.RIGHT, "b") },
+                    }
+                },
+                {
+                    "b", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.RIGHT, "b") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.RIGHT, "b") },
+                        { '#', new Tuple<char, Direction, string>('#', Direction.LEFT, "c") },
+                    }
+                },
+                {
+                    "c", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '1', new Tuple<char, Direction, string>('0', Direction.LEFT, "c") },
+                        { '0', new Tuple<char, Direction, string>('1', Direction.LEFT, "qa") },
+                    }
+                }
+            };
+
+            return new TM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
+        public static TM CreateBinaryDecrement()
+        {
+            var states = new List<string>
+            {
+                "a", "b", "c", "d", "e", "qa"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "a", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '$',  new Tuple<char, Direction, string>('$', Direction.RIGHT, "b") },
+                    }
+                },
+                {
+                    "b", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('1', Direction.RIGHT, "b") },
+                        { '1', new Tuple<char, Direction, string>('0', Direction.RIGHT, "b") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.LEFT, "c") },
+                    }
+                },
+                {
+                    "c", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '1', new Tuple<char, Direction, string>('0', Direction.LEFT, "c") },
+                        { '0', new Tuple<char, Direction, string>('1', Direction.LEFT, "d") },
+                    }
+                },
+                {
+                    "d", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.LEFT, "d") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.LEFT, "d") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.RIGHT, "e") },
+                    }
+                },
+                {
+                    "e", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('1', Direction.RIGHT, "e") },
+                        { '1', new Tuple<char, Direction, string>('0', Direction.RIGHT, "e") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.RIGHT, "qa") },
+                    }
+                },
+            };
+
+            return new TM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
+        public static TM BinaryAdditionTM()
+        {
+            var states = new List<string>
+            {
+                "st", "z1", "z2", "a2", "a3", "m+", "s2", "s3", "s4", "s5",
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '+', '$'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "st";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                // Start
+                {
+                    "st", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '$',  new Tuple<char, Direction, string>('$', Direction.RIGHT, "z1") },
+                    }
+                },
+
+                // Check if 0
+                {
+                    "z1", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0',  new Tuple<char, Direction, string>('0', Direction.RIGHT, "z1") },
+                        { '+',  new Tuple<char, Direction, string>('+', Direction.RIGHT, "qa") },
+                        { '1',  new Tuple<char, Direction, string>('1', Direction.LEFT, "z2") },
+                    }
+                },
+
+                // Not zero, move back to start
+                {
+                    "z2", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0',  new Tuple<char, Direction, string>('0', Direction.LEFT, "z2") },
+                        { '1',  new Tuple<char, Direction, string>('1', Direction.LEFT, "z2") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.RIGHT, "s2") },
+                    }
+                },
+
+                // Decrement
+                {
+                    "s2", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('1', Direction.RIGHT, "s2") },
+                        { '1', new Tuple<char, Direction, string>('0', Direction.RIGHT, "s2") },
+                        { '+', new Tuple<char, Direction, string>('+', Direction.LEFT, "s3") },
+                    }
+                },
+                {
+                    "s3", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '1', new Tuple<char, Direction, string>('0', Direction.LEFT, "s3") },
+                        { '0', new Tuple<char, Direction, string>('1', Direction.LEFT, "s4") },
+                    }
+                },
+                {
+                    "s4", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.LEFT, "s4") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.LEFT, "s4") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.RIGHT, "s5") },
+                    }
+                },
+                {
+                    "s5", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('1', Direction.RIGHT, "s5") },
+                        { '1', new Tuple<char, Direction, string>('0', Direction.RIGHT, "s5") },
+                        { '+', new Tuple<char, Direction, string>('+', Direction.RIGHT, "a2") },
+                    }
+                },
+
+                // Add
+                {
+                    "a2", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.RIGHT, "a2") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.RIGHT, "a2") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.LEFT, "a3") },
+                    }
+                },
+                {
+                    "a3", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '1', new Tuple<char, Direction, string>('0', Direction.LEFT, "a3") },
+                        { '0', new Tuple<char, Direction, string>('1', Direction.LEFT, "mb1") },
+                    }
+                },
+
+                // Move back to start
+                {
+                    "mb1", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.LEFT, "mb1") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.LEFT, "mb1") },
+                        { '+', new Tuple<char, Direction, string>('+', Direction.LEFT, "mb1") },
+                        { '$', new Tuple<char, Direction, string>('$', Direction.RIGHT, "z1") }
+                    }
+                }
+            };
+
+            return new TM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
         public static TM Create0WhoseLengthIsPowerTwo()
         {
             var states = new List<string>
