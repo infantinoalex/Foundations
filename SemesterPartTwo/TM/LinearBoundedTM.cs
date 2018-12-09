@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SemesterPartTwo.TM
 {
-    public class TM
+    public class LinearBoundedTM : TM
     {
-        public TM(
+        public LinearBoundedTM(
             List<string> states,
             List<char> alphabet,
             List<char> tapeAlphabet,
@@ -15,36 +17,17 @@ namespace SemesterPartTwo.TM
             string acceptState,
             string rejectState,
             Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>> deltaFunction)
+            : base (states, alphabet, tapeAlphabet, startingState, acceptState, rejectState, deltaFunction)
         {
-            this.States = states;
-            this.Alphabet = alphabet;
-            this.TapeAlphabet = tapeAlphabet;
-            this.StartingState = startingState;
-            this.AcceptState = acceptState;
-            this.RejectState = rejectState;
-            this.DeltaFunction = deltaFunction;
         }
-
-        public List<string> States { get; }
-
-        public List<char> Alphabet { get; }
-
-        public List<char> TapeAlphabet { get; }
-
-        public string StartingState { get; }
-
-        public string AcceptState { get; }
-
-        public string RejectState { get; }
-
-        public Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>> DeltaFunction { get; }
 
         public bool Execute(string word)
         {
-            var internalTape = word;
+            var internalTape = "_" + word + "_";
+
 
             var currentState = this.StartingState;
-            var currentIndex = 0;
+            var currentIndex = 1;
             while (true)
             {
                 PrintOutCurrentTape(internalTape, currentIndex);
@@ -76,8 +59,8 @@ namespace SemesterPartTwo.TM
                         currentIndex--;
                         if (currentIndex < 0)
                         {
-                            internalTape.Insert(0, "_");
-                            currentIndex = 0;
+                            Console.WriteLine("Excceeded limit of tape.");
+                            return false;
                         }
                     }
                     else
@@ -85,7 +68,8 @@ namespace SemesterPartTwo.TM
                         currentIndex++;
                         if (currentIndex >= internalTape.Length)
                         {
-                            internalTape += "_";
+                            Console.WriteLine("Excceeded limit of tape.");
+                            return false;
                         }
                     }
 
@@ -97,21 +81,6 @@ namespace SemesterPartTwo.TM
                     return false;
                 }
             }
-        }
-
-        public void PrintOutCurrentTape(string internalTape, int currentIndex)
-        {
-            Thread.Sleep(500);
-            var positionIndictorString = string.Empty;
-            for (int index = 0; index < currentIndex; index++)
-            {
-                positionIndictorString += " ";
-            }
-
-            positionIndictorString += "\u2193";
-
-            Console.WriteLine($"\n{positionIndictorString}");
-            Console.WriteLine($"{internalTape}");
         }
     }
 }

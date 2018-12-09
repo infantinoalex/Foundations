@@ -48,11 +48,13 @@
     <Compile Include="Direction.cs" />
     <Compile Include="MultiTapeTM\CreateMultiTM.cs" />
     <Compile Include="MultiTapeTM\MultiTapeTM.cs" />
+    <Compile Include="NonDeterministicTM\NDTM.cs" />
     <Compile Include="PDA\CreatePDA.cs" />
     <Compile Include="PDA\PDA.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TM\CreateTM.cs" />
+    <Compile Include="TM\LinearBoundedTM.cs" />
     <Compile Include="TM\TM.cs" />
   </ItemGroup>
   <ItemGroup>

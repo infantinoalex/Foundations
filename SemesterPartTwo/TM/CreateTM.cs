@@ -181,5 +181,298 @@ namespace SemesterPartTwo.TM
                 rejectState: rejectingState,
                 deltaFunction: deltaFunction);
         }
+
+        public static TM BinaryAddition()
+        {
+            var states = new List<string>
+            {
+                "q0", "q1", "q2", "q3", "q4", "q5"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '+'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                'x'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "q1";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "q1", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "q2") },
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "qr") },
+                        { '0',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "q2") },
+                    }
+                },
+                {
+                    "q2", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { 'x',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q2") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "qa") },
+                        { '0',  new Tuple<char, Direction, string>('x', Direction.RIGHT, "q3") },
+                    }
+                },
+            };
+
+            return new TM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
+        public static NonDeterministicTM.NDTM CreateInClassNDTM()
+        {
+            var states = new List<string>
+            {
+                "a", "b", "c", "d", "e", "f", "g", "qa", "qr"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '#', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                '^'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, List<Tuple<char, Direction, string>>>>
+            {
+                {
+                    "a", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '#',  new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('#', Direction.RIGHT, "g") } },
+                        { '_',  new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('_', Direction.RIGHT, "qr") } },
+                        { '0',  new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('_', Direction.RIGHT, "b") } },
+                        { '1',  new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('_', Direction.RIGHT, "e") } },
+                    }
+                },
+                {
+                    "b", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '0', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('0', Direction.RIGHT, "b") } },
+                        { '1', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('1', Direction.RIGHT, "b") } },
+                        { '#', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('#', Direction.RIGHT, "c") } },
+                    }
+                },
+                {
+                    "c", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '^', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.RIGHT, "c") } },
+                        { '0', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.LEFT, "d") } },
+                    }
+                },
+                {
+                    "d", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '0', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('0', Direction.LEFT, "d") } },
+                        { '1', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('1', Direction.LEFT, "d") } },
+                        { '^', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.LEFT, "d") } },
+                        { '#', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('#', Direction.LEFT, "d") } },
+                        { '_', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('_', Direction.RIGHT, "a") } },
+                    }
+                },
+                {
+                    "e", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '0', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('0', Direction.RIGHT, "e") } },
+                        { '1', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('1', Direction.RIGHT, "e") } },
+                        { '#', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('#', Direction.RIGHT, "f") } },
+                    }
+                },
+                {
+                    "f", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '^', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.RIGHT, "f") } },
+                        { '1', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.LEFT, "d") } },
+                    }
+                },
+                {
+                    "g", new Dictionary<char, List<Tuple<char, Direction, string>>>
+                    {
+                        { '^', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('^', Direction.RIGHT, "g") } },
+                        { '_', new List<Tuple<char, Direction, string>> { new Tuple<char, Direction, string>('_', Direction.LEFT, "qa") } },
+                    }
+                }
+            };
+
+            return new NonDeterministicTM.NDTM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
+        public static LinearBoundedTM CreateInClassTMLinearlyBound()
+        {
+            var states = new List<string>
+            {
+                "a", "b", "c", "d", "e", "f", "g", "qa", "qr"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '#', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                '^'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "a", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '#',  new Tuple<char, Direction, string>('#', Direction.RIGHT, "g") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "qr") },
+                        { '0',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "b") },
+                        { '1',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "e") },
+                    }
+                },
+                {
+                    "b", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.RIGHT, "b") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.RIGHT, "b") },
+                        { '#', new Tuple<char, Direction, string>('#', Direction.RIGHT, "c") },
+                    }
+                },
+                {
+                    "c", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '^', new Tuple<char, Direction, string>('^', Direction.RIGHT, "c") },
+                        { '0', new Tuple<char, Direction, string>('^', Direction.LEFT, "d") },
+                    }
+                },
+                {
+                    "d", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.LEFT, "d") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.LEFT, "d") },
+                        { '^', new Tuple<char, Direction, string>('^', Direction.LEFT, "d") },
+                        { '#', new Tuple<char, Direction, string>('#', Direction.LEFT, "d") },
+                        { '_', new Tuple<char, Direction, string>('_', Direction.RIGHT, "a") },
+                    }
+                },
+                {
+                    "e", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '0', new Tuple<char, Direction, string>('0', Direction.RIGHT, "e") },
+                        { '1', new Tuple<char, Direction, string>('1', Direction.RIGHT, "e") },
+                        { '#', new Tuple<char, Direction, string>('#', Direction.RIGHT, "f") },
+                    }
+                },
+                {
+                    "f", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '^', new Tuple<char, Direction, string>('^', Direction.RIGHT, "f") },
+                        { '1', new Tuple<char, Direction, string>('^', Direction.LEFT, "d") },
+                    }
+                },
+                {
+                    "g", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '^', new Tuple<char, Direction, string>('^', Direction.RIGHT, "g") },
+                        { '_', new Tuple<char, Direction, string>('_', Direction.LEFT, "qa") },
+                    }
+                }
+            };
+
+            return new LinearBoundedTM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
+
+        public static LinearBoundedTM CreateFailedLinearBoundedTM()
+        {
+            var states = new List<string>
+            {
+                "a", "qa", "qr"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '#', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                '^'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<char, Tuple<char, Direction, string>>>
+            {
+                {
+                    "a", new Dictionary<char, Tuple<char, Direction, string>>
+                    {
+                        { '#',  new Tuple<char, Direction, string>('#', Direction.RIGHT, "a") },
+                        { '0',  new Tuple<char, Direction, string>('0', Direction.RIGHT, "a") },
+                        { '1',  new Tuple<char, Direction, string>('1', Direction.RIGHT, "a") },
+                        { '_',  new Tuple<char, Direction, string>('_', Direction.RIGHT, "a") },
+                    }
+                },
+            };
+
+            return new LinearBoundedTM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
     }
 }

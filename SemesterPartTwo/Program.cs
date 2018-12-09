@@ -62,7 +62,7 @@ namespace SemesterPartTwo
             //Console.WriteLine("Checking TM");
             //var inClassTM = CreateTM.CreateInClassTM();
 
-            //foreach (var word in WordsToCheckForTM())
+            //foreach (var word in WordsToCheckForInClassTM())
             //{
             //    var result = inClassTM.Execute(word);
             //    var acceptedRejectedString = result ? "accepted" : "rejected";
@@ -78,6 +78,46 @@ namespace SemesterPartTwo
             //foreach (var word in WordsToCheckForInBookTM())
             //{
             //    var result = inBookTM.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            Console.WriteLine("Checking ND TM");
+            var ndTM = CreateTM.CreateInClassNDTM();
+            var upperLimit = 100;
+
+            foreach (var word in WordsToCheckForInClassTM())
+            {
+                var result = ndTM.Execute(word, upperLimit);
+                var acceptedRejectedString = result ? "accepted" : "rejected";
+                Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            }
+
+            Console.WriteLine("Done. Press [Enter] to continue");
+            Console.ReadLine();
+
+            //Console.WriteLine("Checking Linearly Bounded TM");
+            //var inClassTMBounded = CreateTM.CreateInClassTMLinearlyBound();
+
+            //foreach (var word in WordsToCheckForInClassTM())
+            //{
+            //    var result = inClassTMBounded.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            //Console.WriteLine("Checking Linearly Bounded TM");
+            //var failedLienarBounded = CreateTM.CreateFailedLinearBoundedTM();
+
+            //foreach (var word in WordsToCheckForInClassTM())
+            //{
+            //    var result = failedLienarBounded.Execute(word);
             //    var acceptedRejectedString = result ? "accepted" : "rejected";
             //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
             //}
