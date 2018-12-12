@@ -734,5 +734,55 @@ namespace SemesterPartTwo.TM
                 rejectState: rejectingState,
                 deltaFunction: deltaFunction);
         }
+
+        public static MultiTapeTM.MultiTapeTM CreateExampleMultiTapeTM()
+        {
+            var states = new List<string>
+            {
+                "a", "qa", "qr"
+            };
+
+            var alphabet = new List<char>
+            {
+                '0', '1', '_'
+            };
+
+            var tapeAlphabet = new List<char>
+            {
+                '*'
+            };
+
+            tapeAlphabet.AddRange(alphabet);
+
+            const string startingState = "a";
+
+            const string acceptingState = "qa";
+
+            const string rejectingState = "qr";
+
+            var deltaFunction = new Dictionary<string, Dictionary<Tuple<int, char>, Tuple<char, Direction, string>>>
+            {
+                {
+                    "a", new Dictionary<Tuple<int, char>, Tuple<char, Direction, string>>
+                    {
+                        { new Tuple<int, char>(0, '0'), new Tuple<char, Direction, string>('*', Direction.RIGHT, "a") },
+                        { new Tuple<int, char>(0, '1'), new Tuple<char, Direction, string>('1', Direction.RIGHT, "a") },
+                        { new Tuple<int, char>(0, '_'), new Tuple<char, Direction, string>('_', Direction.LEFT, "qa") },
+                        { new Tuple<int, char>(1, '0'), new Tuple<char, Direction, string>('0', Direction.RIGHT, "a") },
+                        { new Tuple<int, char>(1, '1'), new Tuple<char, Direction, string>('*', Direction.RIGHT, "a") },
+                        { new Tuple<int, char>(1, '_'), new Tuple<char, Direction, string>('_', Direction.LEFT, "qa") }
+                    }
+                }
+            };
+
+            return new MultiTapeTM.MultiTapeTM(
+                states: states,
+                alphabet: alphabet,
+                tapeAlphabet: tapeAlphabet,
+                startingState: startingState,
+                acceptState: acceptingState,
+                rejectState: rejectingState,
+                deltaFunction: deltaFunction);
+        }
     }
 }

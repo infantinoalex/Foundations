@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace SemesterPartTwo.TM
 {
@@ -24,7 +22,8 @@ namespace SemesterPartTwo.TM
         public bool Execute(string word)
         {
             var internalTape = "_" + word + "_";
-
+            var upperLimit = this.States.Count * word.Length * Math.Pow(this.TapeAlphabet.Count, word.Length + 2);
+            var currentLoop = 0;
 
             var currentState = this.StartingState;
             var currentIndex = 1;
@@ -36,6 +35,11 @@ namespace SemesterPartTwo.TM
                     return true;
                 }
                 else if (this.RejectState == currentState)
+                {
+                    return false;
+                }
+
+                if (currentLoop >= upperLimit)
                 {
                     return false;
                 }
@@ -74,6 +78,7 @@ namespace SemesterPartTwo.TM
                     }
 
                     currentState = nextState;
+                    currentLoop++;
                     Thread.Sleep(200);
                 }
                 else

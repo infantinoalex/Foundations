@@ -138,12 +138,25 @@ namespace SemesterPartTwo
             //Console.WriteLine("Done. Press [Enter] to continue");
             //Console.ReadLine();
 
-            Console.WriteLine("Checking Binary Decrement TM");
-            var binaryAddition = CreateTM.BinaryAdditionTM();
+            //Console.WriteLine("Checking Binary Decrement TM");
+            //var binaryAddition = CreateTM.BinaryAdditionTM();
 
-            foreach (var word in BinaryAdditionWords())
+            //foreach (var word in BinaryAdditionWords())
+            //{
+            //    var result = binaryAddition.Execute(word);
+            //    var acceptedRejectedString = result ? "accepted" : "rejected";
+            //    Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
+            //}
+
+            //Console.WriteLine("Done. Press [Enter] to continue");
+            //Console.ReadLine();
+
+            Console.WriteLine("Checking MultiTape TM");
+            var multiTape = CreateTM.CreateExampleMultiTapeTM();
+
+            foreach (var word in MultiTapeTMWords())
             {
-                var result = binaryAddition.Execute(word);
+                var result = multiTape.Execute(word);
                 var acceptedRejectedString = result ? "accepted" : "rejected";
                 Console.WriteLine($"Word: {word} has been {acceptedRejectedString}");
             }
@@ -152,11 +165,24 @@ namespace SemesterPartTwo
             Console.ReadLine();
         }
 
+        public static List<List<string>> MultiTapeTMWords()
+        {
+            var list = new List<List<string>>();
+            var tapesOne = new List<string>
+            {
+                "1111111000110101",
+                "1111111000110101"
+            };
+
+            list.Add(tapesOne);
+            return list;
+        }
+
         public static List<string> BinaryAdditionWords()
         {
             return new List<string>
             {
-                //"$000001+000001$",
+                "$000001+000001$",
                 "$0010+0010$",
             };
         }

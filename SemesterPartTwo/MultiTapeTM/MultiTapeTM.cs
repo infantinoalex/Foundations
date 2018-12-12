@@ -16,7 +16,7 @@ namespace SemesterPartTwo.MultiTapeTM
             string startingState,
             string acceptState,
             string rejectState,
-            Dictionary<string, Dictionary<Tuple<char, char>, Tuple<Tuple<char, Direction, string>, Tuple<char, Direction, string>>>> deltaFunction)
+            Dictionary<string, Dictionary<Tuple<int, char>, Tuple<char, Direction, string>>> deltaFunction)
         {
                 this.States = states;
                 this.Alphabet = alphabet;
@@ -39,20 +39,24 @@ namespace SemesterPartTwo.MultiTapeTM
 
         public string RejectState { get; }
 
-        public Dictionary<string, Dictionary<Tuple<char, char>, Tuple<Tuple<char, Direction, string>, Tuple<char, Direction, string>>>> DeltaFunction { get; }
+        public Dictionary<string, Dictionary<Tuple<int, char>, Tuple<char, Direction, string>>> DeltaFunction { get; }
 
-        public bool Execute(string word)
+        public bool Execute(List<string> tapes)
         {
-            var leftTape = "_" + word + "_";
-            var rightTape = "_" + word + "_";
+            var currentIndexes = new Dictionary<int, int>();
+            for (int loop = 0; loop < tapes.Count; loop++)
+            {
+                currentIndexes[loop] = 0;
+            }
 
             var currentState = this.StartingState;
-            var leftIndex = 1;
-            var rightIndex = 1;
             while (true)
             {
-                PrintOutCurrentTape(leftTape, leftIndex);
-                PrintOutCurrentTape(rightTape, rightIndex);
+                for (int loop = 0; loop < tapes.Count; loop++)
+                {
+                    PrintOutCurrentTape(loop, tapes[loop], currentIndexes[loop]);
+                }
+
                 if (this.AcceptState == currentState)
                 {
                     return true;
@@ -63,85 +67,70 @@ namespace SemesterPartTwo.MultiTapeTM
                 }
 
                 var possibleTransitions = this.DeltaFunction[currentState];
-                // Check left tape
-                var leftChar = leftTape[leftIndex];
-                var rightChar = rightTape[rightIndex];
+                var nextState = string.Empty;
 
-                var tupleToCheck = new Tuple<char, char>(leftChar, rightChar);
-
-                if (possibleTransitions.ContainsKey(tupleToCheck))
+                // Check each tape
+                for (int loop = 0; loop < tapes.Count; loop++)
                 {
-                    var transition = possibleTransitions[tupleToCheck];
+                    var currentTape = tapes[loop];
 
-                    // Process Left
-                    var leftCharToWrite = transition.Item1.Item1;
-                    var leftDirection = transition.Item1.Item2;
-                    var nextLeftState = transition.Item1.Item3;
+                    var currentIndex = currentIndexes[loop];
+                    var charToCheck = currentTape[currentIndex];
+                    var tupleToCheck = new Tuple<int, char>(loop, charToCheck);
 
-                    var leftTapeBuilder = new StringBuilder(leftTape);
-                    leftTapeBuilder[leftIndex] = leftCharToWrite;
-                    leftTape = leftTapeBuilder.ToString();
-                    if (leftDirection == Direction.LEFT)
+                    if (possibleTransitions.ContainsKey(tupleToCheck))
                     {
-                        leftIndex--;
-                        if (leftIndex < 0)
+                        var transition = possibleTransitions[tupleToCheck];
+
+                        // Process Right
+                        var charToWrite = transition.Item1;
+                        var direction = transition.Item2;
+                        var tapeNextState = transition.Item3;
+
+                        var tapeBuilder = new StringBuilder(currentTape);
+                        tapeBuilder[currentIndex] = charToWrite;
+                        currentTape = tapeBuilder.ToString();
+                        if (direction == Direction.LEFT)
                         {
-                            leftTape.Insert(0, "_");
-                            leftIndex = 0;
+                            currentIndex--;
+                            if (currentIndex < 0)
+                            {
+                                currentTape.Insert(0, "_");
+                                currentIndex = 0;
+                            }
                         }
-                    }
-                    else
-                    {
-                        leftIndex++;
-                        if (leftIndex > leftTape.Length)
+                        else
                         {
-                            leftTape += "_";
+                            currentIndex++;
+                            if (currentIndex >= currentTape.Length)
+                            {
+                                currentTape += "_";
+                            }
                         }
-                    }
 
-                    // Process Right
-                    var rightCharToWrite = transition.Item2.Item1;
-                    var rightDirection = transition.Item2.Item2;
-                    var nextRightState = transition.Item2.Item3;
+                        currentIndexes[loop] = currentIndex;
+                        tapes[loop] = currentTape;
 
-                    var rightTapeBuilder = new StringBuilder(rightTape);
-                    rightTapeBuilder[leftIndex] = rightCharToWrite;
-                    rightTape = rightTapeBuilder.ToString();
-                    if (rightDirection == Direction.LEFT)
-                    {
-                        rightIndex--;
-                        if (rightIndex < 0)
+                        if (string.IsNullOrEmpty(nextState))
                         {
-                            rightTape.Insert(0, "_");
-                            rightIndex = 0;
+                            nextState = tapeNextState;
                         }
-                    }
-                    else
-                    {
-                        rightIndex++;
-                        if (rightIndex > rightTape.Length)
+                        else if (!tapeNextState.Equals(nextState))
                         {
-                            rightTape += "_";
+                            return false;
                         }
-                    }
-
-                    if (nextLeftState.Equals(nextRightState))
-                    {
-                        currentState = nextLeftState;
                     }
                     else
                     {
                         return false;
                     }
                 }
-                else
-                {
-                    return false;
-                }
+
+                currentState = nextState;
             }
         }
 
-        public void PrintOutCurrentTape(string internalTape, int currentIndex)
+        public void PrintOutCurrentTape(int tapeNumber, string internalTape, int currentIndex)
         {
             Thread.Sleep(500);
             var positionIndictorString = string.Empty;
@@ -152,7 +141,8 @@ namespace SemesterPartTwo.MultiTapeTM
 
             positionIndictorString += "\u2193";
 
-            Console.WriteLine($"\n{positionIndictorString}");
+            Console.WriteLine($"\nTape {tapeNumber}");
+            Console.WriteLine($"{positionIndictorString}");
             Console.WriteLine($"{internalTape}");
         }
     }
